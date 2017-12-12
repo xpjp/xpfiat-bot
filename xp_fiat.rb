@@ -10,7 +10,7 @@ module JoinAnnouncer
   member_join do |event|
     channel = event.server.text_channels.select { |c| c.name == "welcome" }.first
     gs = event.server.text_channels.select { |c| c.name == "getting_started" }.first
-    event.bot.channel(channel).send_message "#{event.user.mention} ようこそ! rainやtipでXPを受け取るために #getting_started を参考にウォレットを登録してくださいね:hearts:"
+    event.user.pm "XP JPへようこそ! rainやtipでXPを受け取るために #{gs.mention} チャンネルを参考にウォレットを登録してくださいね:hearts:"
   end
 end
 
@@ -54,7 +54,6 @@ def xp2jpy(event,param1)
   message = ":satisfied:"
   if !param1.nil? && param1.to_f > 0
     amount = param1.to_f
-    # xp_jpy = format("%.8f",xp_jpy())
     xp_jpy = xp_jpy() * amount
     message = "#{event.user.mention} #{amount.to_i}XPはいま #{xp_jpy} 円だよ"
   else
