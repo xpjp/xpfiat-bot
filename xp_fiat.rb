@@ -207,6 +207,11 @@ bot.message(containing: "ボットよ！バランスを確認せよ！") do |eve
   event.respond ",balance"
 end
 
+bot.message(containing: ",register") do |event|
+  bs = event.server.text_channels.select { |c| c.name == "bot_spam2" }.first
+  event.respond "#{event.user.mention} ウォレットは登録されました。 #{bs.mention} で`,balance`をして確認してください。"
+end
+
 bot.include! JoinAnnouncer
 bot.include! CommandPatroller
 bot.run

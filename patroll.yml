@@ -3,10 +3,10 @@
 ########################################################################
 
 # 注意文言
-warning_text: "ここでのbalanceはやめてくださいー"
+warning_text: "ここでのbalanceはやめてくださいねー"
 # 監視対象のコマンド一覧
 # Prefixが変更になったときに変更の必要があるのでそのとき考える
-target_commands: 
+target_commands:
 #  - ",register"
   - ",balance"
 # コマンドを実行しても良いチャネルを登録
@@ -15,4 +15,4 @@ target_commands:
 allowed_channels:
 #  - "experiment" # 開発用
 #  - "register-room"
-  - "bot-spam"
+  - "bot_spam2"
