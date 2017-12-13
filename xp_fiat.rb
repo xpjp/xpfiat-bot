@@ -2,8 +2,8 @@ require 'discordrb'
 require 'mechanize'
 require 'json'
 
-# bot = Discordrb::Commands::CommandBot.new token: TOKEN, client_id: CLIENT_ID, prefix:'?'
-bot = Discordrb::Commands::CommandBot.new token: 'MzkwMTI3ODQ4NDk4NjU5MzMx.DRIPvQ.WiTx2mMiMeDPFo3YQv8MI5L1cx8', client_id: 390127848498659331, prefix:'?'
+bot = Discordrb::Commands::CommandBot.new token: TOKEN, client_id: CLIENT_ID, prefix:'?'
+
 module JoinAnnouncer
   extend Discordrb::EventContainer
 
