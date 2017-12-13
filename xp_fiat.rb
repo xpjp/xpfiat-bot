@@ -2,8 +2,8 @@ require 'discordrb'
 require 'mechanize'
 require 'json'
 
-bot = Discordrb::Commands::CommandBot.new token: TOKEN, client_id: CLIENT_ID, prefix:'?'
-
+# bot = Discordrb::Commands::CommandBot.new token: TOKEN, client_id: CLIENT_ID, prefix:'?'
+bot = Discordrb::Commands::CommandBot.new token: 'MzkwMTI3ODQ4NDk4NjU5MzMx.DRIPvQ.WiTx2mMiMeDPFo3YQv8MI5L1cx8', client_id: 390127848498659331, prefix:'?'
 module JoinAnnouncer
   extend Discordrb::EventContainer
 
@@ -12,6 +12,18 @@ module JoinAnnouncer
     gs = event.server.text_channels.select { |c| c.name == "getting_started" }.first
     event.user.pm "XP JPへようこそ! rainやtipでXPを受け取るために #{gs.mention} チャンネルを参考にウォレットを登録してくださいね:hearts:"
   end
+end
+# -----------------------------------------------------------------------------
+#1以上なら3桁ごとにカンマを挿入する関数
+def insert_comma(num)
+  if num < 1
+    #小数点
+    num = num.to_f
+  else
+    #整数 -> 文字列
+    num = num.round.to_s.reverse.gsub( /(\d{3})(?=\d)/, '\1,').reverse
+  end
+  return num
 end
 
 # -----------------------------------------------------------------------------
@@ -79,8 +91,8 @@ bot.command :どれだけ買える do |event, param1|
     xp_jpy = xp_jpy()
     yen = param1.to_f
     amount = yen / xp_jpy
-
-    event.respond "#{event.user.mention} #{yen.to_i}円で #{amount.to_i}XPくらい買えるよ"
+    yen = insert_comma(yen)
+    event.respond "#{event.user.mention} #{yen}円で #{amount.to_i}XPくらい買えるよ"
   end
 end
 
@@ -140,9 +152,15 @@ def how_much(amount)
 end
 
 # -----------------------------------------------------------------------------
+# def noguchi(event)
+#   amount = how_much(1000)
+#   event.respond "#{event.user.mention} 野口「私の肖像画一枚で、#{amount.to_i} XPが買える」"
+# end
+
 def noguchi(event)
   amount = how_much(1000)
-  event.respond "#{event.user.mention} 野口「私の肖像画一枚で、#{amount.to_i} XPが買える」"
+  amount = amount.to_i
+  event.respond "#{event.user.mention} 野口「私の肖像画一枚で、#{insert_comma(amount)} XPが買える」"
 end
 
 def higuchi(event)
