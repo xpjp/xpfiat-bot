@@ -23,5 +23,5 @@ $ mv .env.sample .env
 Gemの管理がBundler経由になったので、以下のように`bundle exec`を忘れずに
 
 ~~~sh
-$ bundle exec xp_fiat.rb
+$ bundle exec ruby xp_fiat.rb
 ~~~
