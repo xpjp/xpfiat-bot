@@ -1,6 +1,7 @@
 require 'discordrb'
 require 'mechanize'
 require 'json'
+require './command_patroller'
 
 bot = Discordrb::Commands::CommandBot.new token: TOKEN, client_id: CLIENT_ID, prefix:'?'
 
@@ -207,4 +208,5 @@ bot.message(containing: "ボットよ！バランスを確認せよ！") do |eve
 end
 
 bot.include! JoinAnnouncer
+bot.include! CommandPatroller
 bot.run
