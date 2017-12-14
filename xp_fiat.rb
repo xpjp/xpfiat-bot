@@ -93,18 +93,20 @@ bot.command :help do |event|
 end
 
 # -----------------------------------------------------------------------------
+# 降雨量Bot
 
 bot.command :how_rain do |event|
   messages = event.channel.history(50)
   sum = 0
-  messages.each { |message|
-
-      if message.content.include?(",rain") then
-          sum += message.content.split(' ')[1].to_i
+  messages.each do |message|
+    if message.content.include?(",rain") then
+      dividedMessage = message.content.split(' ')
+      if dividedMessage.length >= 2 then
+        amount = dividedMessage[1].to_i
+        sum += amount
       end
-
-    }
-
+    end
+  end
   event.send_message("只今の降雨量は #{sum} Xpです。")
 end
 
