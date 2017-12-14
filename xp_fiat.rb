@@ -14,16 +14,18 @@ module JoinAnnouncer
   end
 end
 # -----------------------------------------------------------------------------
-#1以上なら3桁ごとにカンマを挿入する関数
+#数値３桁ごとにカンマを挿入する関数
 def insert_comma(num)
-  if num < 1
-    #小数点
-    num = num.to_f
+  num =  num.to_s
+  #小数点判定
+  if num.include?(".")  
+    #小数点以下を含む場合
+    num =  num.split(".")
+    return num[0].gsub(/(\d)(?=(\d{3})+(?!\d))/, '\1,')+ ("." + num[1])
   else
-    #整数 -> 文字列
-    num = num.round.to_s.reverse.gsub( /(\d{3})(?=\d)/, '\1,').reverse
+    #そうでない場合
+    return num.gsub(/(\d)(?=(\d{3})+(?!\d))/, '\1,')
   end
-  return num
 end
 
 # -----------------------------------------------------------------------------
@@ -67,10 +69,10 @@ def xp2jpy(event,param1)
   if !param1.nil? && param1.to_f > 0
     amount = param1.to_f
     xp_jpy = xp_jpy() * amount
-    message = "#{event.user.mention} #{amount.to_i}XPはいま #{xp_jpy} 円だよ"
+    message = "#{event.user.mention} #{insert_comma(amount.to_i)}XPはいま #{insert_comma(xp_jpy.round(8))} 円だよ"
   else
     xp_jpy = format("%.8f",xp_jpy())
-    message = "#{event.user.mention} 1XPはいま #{xp_jpy} 円だよ"
+    message = "#{event.user.mention} 1XPはいま #{insert_comma(xp_jpy)} 円だよ"
   end
   event.respond message
 end
@@ -91,8 +93,7 @@ bot.command :どれだけ買える do |event, param1|
     xp_jpy = xp_jpy()
     yen = param1.to_f
     amount = yen / xp_jpy
-    yen = insert_comma(yen)
-    event.respond "#{event.user.mention} #{yen}円で #{amount.to_i}XPくらい買えるよ"
+    event.respond "#{event.user.mention} #{insert_comma(yen.to_i)}円で #{insert_comma(amount.to_i)}XPくらい買えるよ"
   end
 end
 
@@ -152,25 +153,20 @@ def how_much(amount)
 end
 
 # -----------------------------------------------------------------------------
-# def noguchi(event)
-#   amount = how_much(1000)
-#   event.respond "#{event.user.mention} 野口「私の肖像画一枚で、#{amount.to_i} XPが買える」"
-# end
-
 def noguchi(event)
   amount = how_much(1000)
-  amount = amount.to_i
-  event.respond "#{event.user.mention} 野口「私の肖像画一枚で、#{insert_comma(amount)} XPが買える」"
+  event.respond "#{event.user.mention} 野口「私の肖像画一枚で、#{insert_comma(amount.to_i)} XPが買える」"
+  #event.respond "#{event.user.mention} 野口「私の肖像画一枚で、#{amount} XPが買える」"
 end
 
 def higuchi(event)
   amount = how_much(5000)
-  event.respond "#{event.user.mention} 樋口「私の肖像画一枚で、#{amount.to_i} XPが買える」"
+  event.respond "#{event.user.mention} 樋口「私の肖像画一枚で、#{insert_comma(amount.to_i)} XPが買える」"
 end
 
 def yukichi(event)
   amount = how_much(10000)
-  event.respond "#{event.user.mention} 諭吉「私の肖像画一枚で、#{amount.to_i} XPが買える」"
+  event.respond "#{event.user.mention} 諭吉「私の肖像画一枚で、#{insert_comma(amount.to_i)} XPが買える」"
 end
 
 # -----------------------------------------------------------------------------
@@ -200,7 +196,7 @@ end
 def doge(event)
   d = xp_doge()
   amount = 1.0 / d.to_f
-  event.respond "#{event.user.mention} イッヌ「わい一匹で、#{amount.to_i} くらいXPが買えるワン」"
+  event.respond "#{event.user.mention} イッヌ「わい一匹で、#{insert_comma(amount.to_i)} くらいXPが買えるワン」"
 end
 
 bot.command :doge do |event|
