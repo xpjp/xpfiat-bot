@@ -96,12 +96,16 @@ end
 # 降雨量Bot
 
 bot.command :how_rain do |event|
-  messages = event.channel.history(50)
+  how_rain(event, 100)
+end
+
+def how_rain(event, max_history)
+  messages = event.channel.history(max_history)
   sum = 0
   messages.each do |message|
-    if message.content.include?(",rain") then
+    if message.content.include?(",rain")
       dividedMessage = message.content.split(' ')
-      if dividedMessage.length >= 2 then
+      if dividedMessage.length >= 2
         amount = dividedMessage[1].to_i
         sum += amount
       end
