@@ -15,4 +15,5 @@ target_commands:
 allowed_channels:
 #  - "experiment" # 開発用
 #  - "register-room"
+  - "bot_spam"
   - "bot_spam2"
