@@ -150,23 +150,20 @@ end
 def how_much(amount)
   xp_jpy = xp_jpy()
   jpy = amount / xp_jpy
-  jpy
+  jpy.to_i
 end
 
 # -----------------------------------------------------------------------------
 def noguchi(event)
-  amount = how_much(1000)
-  event.respond "#{event.user.mention} 野口「私の肖像画一枚で、#{amount.to_i} XPが買える」"
+  event.respond "#{event.user.mention} 野口「私の肖像画一枚で、#{how_much(1000)} XPが買える」"
 end
 
 def higuchi(event)
-  amount = how_much(5000)
-  event.respond "#{event.user.mention} 樋口「私の肖像画一枚で、#{amount.to_i} XPが買える」"
+  event.respond "#{event.user.mention} 樋口「私の肖像画一枚で、#{how_much(5000)} XPが買える」"
 end
 
 def yukichi(event)
-  amount = how_much(10000)
-  event.respond "#{event.user.mention} 諭吉「私の肖像画一枚で、#{amount.to_i} XPが買える」"
+  event.respond "#{event.user.mention} 諭吉「私の肖像画一枚で、#{how_much(10000)} XPが買える」"
 end
 
 # -----------------------------------------------------------------------------
