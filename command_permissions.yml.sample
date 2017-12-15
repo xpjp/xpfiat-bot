@@ -1,0 +1,15 @@
+# 犬系コマンドをchat_1に限定する例
+
+commands:
+  -
+    command_name: doge
+    allowed_channels:
+      - chat_1
+  -
+    command_name: "犬"
+    allowed_channels:
+      - chat_1
+  -
+    command_name: "イッヌ"
+    allowed_channels:
+      - chat_1
