@@ -2,9 +2,11 @@ require 'discordrb'
 require 'mechanize'
 require 'json'
 require './command_patroller'
+require './command_bot_ext'
 require 'dotenv/load'
+require 'yaml'
 
-bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix:'?'
+bot = CommandBotExt.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix:'?'
 
 module JoinAnnouncer
   extend Discordrb::EventContainer
@@ -234,6 +236,14 @@ bot.message(containing: ",register") do |event|
   bs = event.server.text_channels.select { |c| c.name == "bot_spam2" }.first
   event.respond "#{event.user.mention} ウォレットは登録されました。 #{bs.mention} で`,balance`をして確認してください。"
 end
+
+
+# commandを使えるchannelを制限する
+command_permissions = YAML.load_file("./command_permissions.yml")
+command_permissions["commands"].each do |command|
+  bot.set_channel_restriction(command["command_name"], command["allowed_channels"])
+end
+
 
 bot.include! JoinAnnouncer
 bot.include! CommandPatroller

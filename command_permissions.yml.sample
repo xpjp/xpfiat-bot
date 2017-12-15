@@ -1,0 +1,10 @@
+commands:
+  -
+    command_name: doge
+    allowed_channels:
+      - chat_1
+      - chat_2
+  -
+    command_name: ng
+    allowed_channels:
+      - chat_1
