@@ -65,9 +65,7 @@ def xp2jpy(event,param1)
   event.respond message
 end
 
-bot.command [:xp_jpy, :いくら] do |event, param1|
-  xp2jpy(event, param1)
-end
+bot.command [:xp_jpy, :いくら] { |event, param1| xp2jpy(event, param1) }
 
 # -----------------------------------------------------------------------------
 bot.command :どれだけ買える do |event, param1|
@@ -93,9 +91,7 @@ end
 # -----------------------------------------------------------------------------
 # 降雨量Bot
 
-bot.command :how_rain do |event|
-  how_rain(event, 100)
-end
+bot.command [:how_rain] { |event| how_rain(event, 100) }
 
 def how_rain(event, max_history)
   messages = event.channel.history(max_history)
@@ -113,9 +109,7 @@ def how_rain(event, max_history)
 end
 
 # -----------------------------------------------------------------------------
-bot.message(containing: "はよ！") do |event|
-  event.respond "#{event.user.mention} __***SOON!***__"
-end
+bot.message(containing: "はよ！") { |event| event.respond "#{event.user.mention} __***SOON!***__" }
 
 # -----------------------------------------------------------------------------
 # CoinExchange.io
@@ -176,17 +170,11 @@ def yukichi(event)
 end
 
 # -----------------------------------------------------------------------------
-bot.command [:野口, :ng] do |event|
-  noguchi(event)
-end
+bot.command [:野口, :ng] { |event| noguchi(event) }
 
-bot.command [:樋口, :hg] do |event|
-  higuchi(event)
-end
+bot.command [:樋口, :hg] { |event| higuchi(event) }
 
-bot.command [:諭吉, :yk] do |event|
-  yukichi(event)
-end
+bot.command [:諭吉, :yk] { |event| yukichi(event) }
 
 # -----------------------------------------------------------------------------
 def doge(event)
@@ -195,18 +183,12 @@ def doge(event)
   event.respond "#{event.user.mention} イッヌ「わい一匹で、#{amount.to_i} くらいXPが買えるワン」"
 end
 
-bot.command [:doge, :犬, :イッヌ] do |event|
-  doge(event)
-end
+bot.command [:doge, :犬, :イッヌ] { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
-bot.command :今何人 do |event|
-  event.respond "#{event.user.mention} ここのメンバーはいま #{event.server.member_count}人だよーん"
-end
+bot.command [:今何人] { |event| event.respond "#{event.user.mention} ここのメンバーはいま #{event.server.member_count}人だよーん" }
 
-bot.message(containing: "ボットよ！バランスを確認せよ！") do |event|
-  event.respond ",balance"
-end
+bot.message(containing: "ボットよ！バランスを確認せよ！") { |event| event.respond ",balance" }
 
 bot.message(containing: ",register") do |event|
   bs = event.server.text_channels.select { |c| c.name == "bot_spam2" }.first
