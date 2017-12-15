@@ -4,7 +4,7 @@ require 'json'
 require './command_patroller'
 require 'dotenv/load'
 
-bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix:'?'
+bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix:['?','？']
 
 module JoinAnnouncer
   extend Discordrb::EventContainer
