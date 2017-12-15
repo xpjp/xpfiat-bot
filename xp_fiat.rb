@@ -154,24 +154,23 @@ def how_much(amount)
 end
 
 # -----------------------------------------------------------------------------
-def noguchi(event)
-  event.respond "#{event.user.mention} 野口「私の肖像画一枚で、#{how_much(1000)} XPが買える」"
-end
-
-def higuchi(event)
-  event.respond "#{event.user.mention} 樋口「私の肖像画一枚で、#{how_much(5000)} XPが買える」"
-end
-
-def yukichi(event)
-  event.respond "#{event.user.mention} 諭吉「私の肖像画一枚で、#{how_much(10000)} XPが買える」"
+def say_hero(name)
+  case name
+  when :ng
+    "野口「私の肖像画一枚で、#{how_much(1000)} XPが買える」"
+  when :hg
+    "樋口「私の肖像画一枚で、#{how_much(5000)} XPが買える」"
+  when :yk
+    "諭吉「私の肖像画一枚で、#{how_much(10000)} XPが買える」"
+  end
 end
 
 # -----------------------------------------------------------------------------
-bot.command [:野口, :ng] { |event| noguchi(event) }
+bot.command [:野口, :ng] { |event| event.respond "#{event.user.mention} #{say_hero(:ng)}" }
 
-bot.command [:樋口, :hg] { |event| higuchi(event) }
+bot.command [:樋口, :hg] { |event| event.respond "#{event.user.mention} #{say_hero(:hg)}" }
 
-bot.command [:諭吉, :yk] { |event| yukichi(event) }
+bot.command [:諭吉, :yk] { |event| event.respond "#{event.user.mention} #{say_hero(:yk)}" }
 
 # -----------------------------------------------------------------------------
 def doge(event)
