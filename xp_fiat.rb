@@ -65,11 +65,7 @@ def xp2jpy(event,param1)
   event.respond message
 end
 
-bot.command :xp_jpy do |event, param1|
-  xp2jpy(event, param1)
-end
-
-bot.command :いくら do |event, param1|
+bot.command [:xp_jpy, :いくら] do |event, param1|
   xp2jpy(event, param1)
 end
 
@@ -180,25 +176,15 @@ def yukichi(event)
 end
 
 # -----------------------------------------------------------------------------
-bot.command :野口 do |event|
+bot.command [:野口, :ng] do |event|
   noguchi(event)
 end
 
-bot.command :ng do |event|
-  noguchi(event)
-end
-
-bot.command :樋口 do |event|
-  higuchi(event)
-end
-bot.command :hg do |event|
+bot.command [:樋口, :hg] do |event|
   higuchi(event)
 end
 
-bot.command :諭吉 do |event|
-  yukichi(event)
-end
-bot.command :yk do |event|
+bot.command [:諭吉, :yk] do |event|
   yukichi(event)
 end
 
@@ -209,15 +195,7 @@ def doge(event)
   event.respond "#{event.user.mention} イッヌ「わい一匹で、#{amount.to_i} くらいXPが買えるワン」"
 end
 
-bot.command :doge do |event|
-  doge(event)
-end
-
-bot.command :犬 do |event|
-  doge(event)
-end
-
-bot.command :イッヌ do |event|
+bot.command [:doge, :犬, :イッヌ] do |event|
   doge(event)
 end
 
