@@ -31,6 +31,7 @@ bot.command :help do |event|
       ?hg or ?樋口 五千円で買えるXPの量
       ?yk or ?諭吉 一万円で買えるXPの量
       ?doge or ?犬 1DOGEで買えるXPの量
+      ?how_rain 降雨量の追加(直近100メッセージ)
     EOS
 
     embed.description = help
