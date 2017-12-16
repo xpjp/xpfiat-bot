@@ -129,7 +129,13 @@ def how_rain(event, max_history)
 end
 
 # -----------------------------------------------------------------------------
-bot.message(containing: "はよ！") { |event| event.respond "#{event.user.mention} __***SOON!***__" }
+bot.message(containing: "はよ！") do |event|
+  if event.content.include?("おはよ！")
+    event.respond "#{event.user.mention} __***MOON!***__"
+  else
+    event.respond "#{event.user.mention} __***SOON!***__"
+  end
+end
 
 # -----------------------------------------------------------------------------
 # CoinExchange.io
