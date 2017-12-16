@@ -129,10 +129,7 @@ end
 # -----------------------------------------------------------------------------
 # 雑談対話Bot
 bot.command :talk_ai do |event, message|
-  if message.nil?
-    event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」")
-    return
-  end
+  return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if param1.nil?
 
   case rand(1..3)
   when 1
@@ -148,7 +145,8 @@ def docomo_talk(event,message,name,type)
   unless message.nil?
     body = {
       utt: message,
-      mode: "dialog"
+      mode: "dialog",
+      t:type
     }.to_json
     api_key = ENV["DOCOMO_TALK_APIKEY"]
     response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
