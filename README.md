@@ -1,6 +1,6 @@
 # XP to Fiat Discord bot script
 
-[!][Build Status](https://travis-ci.org/xpjp/xpfiat-bot.svg?branch=master)[travis]
+[![Build Status](https://travis-ci.org/xpjp/xpfiat-bot.svg?branch=master)](https://travis-ci.org/xpjp/xpfiat-bot)
 
 ## Usage
 
