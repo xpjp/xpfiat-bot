@@ -19,7 +19,7 @@ module JoinAnnouncer
 end
 
 # -----------------------------------------------------------------------------
-def check_price(coin_name)
+def read_price(coin_name)
   response = Mechanize.new.get(get_url(coin_name))
   perse_json(coin_name, JSON.parse(response.body))
 end
@@ -47,9 +47,9 @@ def perse_json(coin_name, json)
 end
 
 def xp_jpy
-  xp_doge = check_price(:xp_doge)
-  doge_btc = check_price(:doge_btc)
-  btc_jpy = check_price(:btc_jpy)
+  xp_doge = read_price(:xp_doge)
+  doge_btc = read_price(:doge_btc)
+  btc_jpy = read_price(:btc_jpy)
   xp_btc = doge_btc.to_f * xp_doge.to_f
   xp_jpy = btc_jpy.to_f * xp_btc.to_f
   xp_jpy
@@ -177,7 +177,7 @@ bot.command [:諭吉, :yk] { |event| event.respond "#{event.user.mention} #{say_
 
 # -----------------------------------------------------------------------------
 def doge(event)
-  d = check_price(:xp_doge)
+  d = read_price(:xp_doge)
   amount = 1.0 / d.to_f
   event.respond "#{event.user.mention} イッヌ「わい一匹で、#{amount.to_i} くらいXPが買えるワン」"
 end
