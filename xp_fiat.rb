@@ -57,10 +57,10 @@ def xp2jpy(event,param1)
   if !param1.nil? && param1.to_f > 0
     amount = param1.to_f
     xp_jpy = xp_jpy() * amount
-    message = "#{event.user.mention} #{amount.to_i}XPはいま #{xp_jpy} 円だよ"
+    message = "#{event.user.mention} :xpchan01:＜ #{amount.to_i}XPはいま #{xp_jpy} 円だよ〜"
   else
     xp_jpy = format("%.8f",xp_jpy())
-    message = "#{event.user.mention} 1XPはいま #{xp_jpy} 円だよ"
+    message = "#{event.user.mention} :xpchan01:＜ 1XPはいま #{xp_jpy} 円だよ〜"
   end
   event.respond message
 end
@@ -76,13 +76,13 @@ end
 # -----------------------------------------------------------------------------
 bot.command :どれだけ買える do |event, param1|
   if param1.nil? || param1.empty? || param1.to_f <= 0
-    event.respond "#{event.user.mention} 金額を正しく指定してね :satisfied:"
+    event.respond "#{event.user.mention} :xpchan01:＜ 金額を正しく指定してね〜 :satisfied:"
   else
     xp_jpy = xp_jpy()
     yen = param1.to_f
     amount = yen / xp_jpy
 
-    event.respond "#{event.user.mention} #{yen.to_i}円で #{amount.to_i}XPくらい買えるよ"
+    event.respond "#{event.user.mention} :xpchan01:＜ #{yen.to_i}円で #{amount.to_i}XPくらい買えるよ〜"
   end
 end
 
@@ -166,17 +166,17 @@ end
 # -----------------------------------------------------------------------------
 def noguchi(event)
   amount = how_much(1000)
-  event.respond "#{event.user.mention} 野口「私の肖像画一枚で、#{amount.to_i} XPが買える」"
+  event.respond "#{event.user.mention} :noguchi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
 end
 
 def higuchi(event)
   amount = how_much(5000)
-  event.respond "#{event.user.mention} 樋口「私の肖像画一枚で、#{amount.to_i} XPが買える」"
+  event.respond "#{event.user.mention} :higuchi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
 end
 
 def yukichi(event)
   amount = how_much(10000)
-  event.respond "#{event.user.mention} 諭吉「私の肖像画一枚で、#{amount.to_i} XPが買える」"
+  event.respond "#{event.user.mention} :yukichi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
 end
 
 # -----------------------------------------------------------------------------
@@ -206,7 +206,7 @@ end
 def doge(event)
   d = xp_doge()
   amount = 1.0 / d.to_f
-  event.respond "#{event.user.mention} イッヌ「わい一匹で、#{amount.to_i} くらいXPが買えるワン」"
+  event.respond "#{event.user.mention} :doge:＜ わい一匹で、#{amount.to_i} くらいXPが買えるワン"
 end
 
 bot.command :doge do |event|
@@ -223,7 +223,7 @@ end
 
 # -----------------------------------------------------------------------------
 bot.command :今何人 do |event|
-  event.respond "#{event.user.mention} ここのメンバーはいま #{event.server.member_count}人だよーん"
+  event.respond "#{event.user.mention} :xpchan01:＜ ここのコミュニティには今 #{event.server.member_count}人いるよ〜"
 end
 
 bot.message(containing: "ボットよ！バランスを確認せよ！") do |event|
