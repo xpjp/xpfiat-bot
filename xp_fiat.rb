@@ -128,26 +128,26 @@ end
 
 # -----------------------------------------------------------------------------
 # 雑談対話Bot
-bot.command :talk_ai do |event, param1|
-  if param1.nil?
+bot.command :talk_ai do |event, message|
+  if message.nil?
     event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」")
     return
   end
 
   case rand(1..3)
   when 1
-    docomo_talk(event,param1,"Xp様","10")
+    docomo_talk(event,message,"Xp様","10")
   when 2
-    docomo_talk(event,param1,"浪速のおっちゃん","20")
+    docomo_talk(event,message,"浪速のおっちゃん","20")
   when 3
-    docomo_talk(event,param1,"赤さん","30")
+    docomo_talk(event,message,"赤さん","30")
   end
 end
 
-def docomo_talk(event,param1,name,type)
-  unless param1.nil?
+def docomo_talk(event,message,name,type)
+  unless message.nil?
     body = {
-      utt: param1,
+      utt: message,
       mode: "dialog"
     }.to_json
     api_key = ENV["DOCOMO_TALK_APIKEY"]
