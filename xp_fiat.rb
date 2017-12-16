@@ -136,7 +136,8 @@ def docomo_talk(event,param1,name,type)
       utt: param1,
       mode: "dialog"
     }.to_json
-    response = agent.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=427a43726d38505579494b4c585a2f634b6e34322f476f4c373876534168774c4a394f692f52656b44362f", body)
+    api_key = ENV["DOCOMO_TALK_APIKEY"]
+    response = agent.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY="+api_key, body)
     utt = JSON.parse(response.body)["utt"]
     event.send_message("#{name}「#{utt} 」")
   end
