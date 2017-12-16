@@ -118,7 +118,11 @@ end
 
 # -----------------------------------------------------------------------------
 bot.message(containing: "はよ！") do |event|
-  event.respond "#{event.user.mention} __***SOON!***__"
+  if event.message.include?("おはよ！")
+    event.respond "#{event.user.mention} __***MOON!***__"
+  else
+    event.respond "#{event.user.mention} __***SOON!***__"
+  end
 end
 
 # -----------------------------------------------------------------------------
