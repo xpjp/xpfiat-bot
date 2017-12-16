@@ -80,29 +80,16 @@ def xp_jpy
 end
 
 # -----------------------------------------------------------------------------
-<<<<<<< HEAD
 def xp2jpy(event, param1)
   message =
     if (amount = param1.to_f).positive?
       _xp_jpy = xp_jpy * amount
-      "#{event.user.mention} #{amount.to_i}XPはいま #{_xp_jpy} 円だよ"
+      "#{event.user.mention} :xpchan01:＜ #{amount.to_i}XPはいま #{_xp_jpy} 円だよ〜"
     else
       _xp_jpy = format("%.8f", xp_jpy)
-      "#{event.user.mention} 1XPはいま #{_xp_jpy} 円だよ"
+      "#{event.user.mention} :xpchan01:＜ 1XPはいま #{_xp_jpy} 円だよ〜"
     end
   message ||= ":satisfied:"
-=======
-def xp2jpy(event,param1)
-  message = ":satisfied:"
-  if !param1.nil? && param1.to_f > 0
-    amount = param1.to_f
-    xp_jpy = xp_jpy() * amount
-    message = "#{event.user.mention} :xpchan01:＜ #{amount.to_i}XPはいま #{xp_jpy} 円だよ〜"
-  else
-    xp_jpy = format("%.8f",xp_jpy())
-    message = "#{event.user.mention} :xpchan01:＜ 1XPはいま #{xp_jpy} 円だよ〜"
-  end
->>>>>>> d649be9... 絵文字追加に伴い、botの返す文を若干変更しました。
   event.respond message
 end
 
@@ -187,31 +174,15 @@ def how_much(amount)
 end
 
 # -----------------------------------------------------------------------------
-<<<<<<< HEAD
 def say_hero(name)
   case name
   when :ng
-    "野口「私の肖像画一枚で、#{how_much(1000)} XPが買える」"
+    ":noguchi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
   when :hg
-    "樋口「私の肖像画一枚で、#{how_much(5000)} XPが買える」"
+    ":higuchi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
   when :yk
-    "諭吉「私の肖像画一枚で、#{how_much(10_000)} XPが買える」"
+    ":yukichi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
   end
-=======
-def noguchi(event)
-  amount = how_much(1000)
-  event.respond "#{event.user.mention} :noguchi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
-end
-
-def higuchi(event)
-  amount = how_much(5000)
-  event.respond "#{event.user.mention} :higuchi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
-end
-
-def yukichi(event)
-  amount = how_much(10000)
-  event.respond "#{event.user.mention} :yukichi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
->>>>>>> d649be9... 絵文字追加に伴い、botの返す文を若干変更しました。
 end
 
 # -----------------------------------------------------------------------------
@@ -231,13 +202,7 @@ end
 bot.command [:doge, :犬, :イッヌ] { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
-<<<<<<< HEAD
-bot.command [:今何人] { |event| event.respond "#{event.user.mention} ここのメンバーはいま #{event.server.member_count}人だよーん" }
-=======
-bot.command :今何人 do |event|
-  event.respond "#{event.user.mention} :xpchan01:＜ ここのコミュニティには今 #{event.server.member_count}人いるよ〜"
-end
->>>>>>> d649be9... 絵文字追加に伴い、botの返す文を若干変更しました。
+bot.command [:今何人] { |event| event.respond "#{event.user.mention} :xpchan01:＜ ここのコミュニティには今 #{event.server.member_count}人いるよ〜" }
 
 bot.message(containing: "ボットよ！バランスを確認せよ！") { |event| event.respond ",balance" }
 
