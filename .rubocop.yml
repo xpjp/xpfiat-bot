@@ -32,3 +32,7 @@ Style/MethodLength:
 # "Missing top-level class documentation comment."を無効
 Style/Documentation:
   Enabled: false
+
+# 変数名の先頭のアンダースコアを許可する
+Lint/UnderscorePrefixedVariableName:
+  Enabled: false

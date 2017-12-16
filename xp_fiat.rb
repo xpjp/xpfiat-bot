@@ -55,21 +55,8 @@ end
 
 # -----------------------------------------------------------------------------
 def xp2jpy(event, param1)
-  message = ":satisfied:"
-  if !param1.nil? && param1.to_f > 0
-    amount = param1.to_f
-    xp_jpy = xp_jpy() * amount
-    message = "#{event.user.mention} #{amount.to_i}XPはいま #{xp_jpy} 円だよ"
-  else
-    xp_jpy = format("%.8f", xp_jpy())
-    message = "#{event.user.mention} 1XPはいま #{xp_jpy} 円だよ"
-  end
-  event.respond message
-end
-
-def xp2jpy(event, param1)
   message =
-    if (amount = param1.to_f) > 0
+    if (amount = param1.to_f).positive?
       _xp_jpy = xp_jpy * amount
       "#{event.user.mention} #{amount.to_i}XPはいま #{_xp_jpy} 円だよ"
     else
