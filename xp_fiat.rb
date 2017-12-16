@@ -65,13 +65,7 @@ def xp2jpy(event,param1)
   event.respond message
 end
 
-bot.command :xp_jpy do |event, param1|
-  xp2jpy(event, param1)
-end
-
-bot.command :いくら do |event, param1|
-  xp2jpy(event, param1)
-end
+bot.command [:xp_jpy, :いくら] { |event, param1| xp2jpy(event, param1) }
 
 # -----------------------------------------------------------------------------
 bot.command :どれだけ買える do |event, param1|
@@ -97,9 +91,7 @@ end
 # -----------------------------------------------------------------------------
 # 降雨量Bot
 
-bot.command :how_rain do |event|
-  how_rain(event, 100)
-end
+bot.command [:how_rain] { |event| how_rain(event, 100) }
 
 def how_rain(event, max_history)
   messages = event.channel.history(max_history)
@@ -117,9 +109,7 @@ def how_rain(event, max_history)
 end
 
 # -----------------------------------------------------------------------------
-bot.message(containing: "はよ！") do |event|
-  event.respond "#{event.user.mention} __***SOON!***__"
-end
+bot.message(containing: "はよ！") { |event| event.respond "#{event.user.mention} __***SOON!***__" }
 
 # -----------------------------------------------------------------------------
 # CoinExchange.io
@@ -160,47 +150,27 @@ end
 def how_much(amount)
   xp_jpy = xp_jpy()
   jpy = amount / xp_jpy
-  jpy
+  jpy.to_i
 end
 
 # -----------------------------------------------------------------------------
-def noguchi(event)
-  amount = how_much(1000)
-  event.respond "#{event.user.mention} 野口「私の肖像画一枚で、#{amount.to_i} XPが買える」"
-end
-
-def higuchi(event)
-  amount = how_much(5000)
-  event.respond "#{event.user.mention} 樋口「私の肖像画一枚で、#{amount.to_i} XPが買える」"
-end
-
-def yukichi(event)
-  amount = how_much(10000)
-  event.respond "#{event.user.mention} 諭吉「私の肖像画一枚で、#{amount.to_i} XPが買える」"
+def say_hero(name)
+  case name
+  when :ng
+    "野口「私の肖像画一枚で、#{how_much(1000)} XPが買える」"
+  when :hg
+    "樋口「私の肖像画一枚で、#{how_much(5000)} XPが買える」"
+  when :yk
+    "諭吉「私の肖像画一枚で、#{how_much(10000)} XPが買える」"
+  end
 end
 
 # -----------------------------------------------------------------------------
-bot.command :野口 do |event|
-  noguchi(event)
-end
+bot.command [:野口, :ng] { |event| event.respond "#{event.user.mention} #{say_hero(:ng)}" }
 
-bot.command :ng do |event|
-  noguchi(event)
-end
+bot.command [:樋口, :hg] { |event| event.respond "#{event.user.mention} #{say_hero(:hg)}" }
 
-bot.command :樋口 do |event|
-  higuchi(event)
-end
-bot.command :hg do |event|
-  higuchi(event)
-end
-
-bot.command :諭吉 do |event|
-  yukichi(event)
-end
-bot.command :yk do |event|
-  yukichi(event)
-end
+bot.command [:諭吉, :yk] { |event| event.respond "#{event.user.mention} #{say_hero(:yk)}" }
 
 # -----------------------------------------------------------------------------
 def doge(event)
@@ -209,26 +179,12 @@ def doge(event)
   event.respond "#{event.user.mention} イッヌ「わい一匹で、#{amount.to_i} くらいXPが買えるワン」"
 end
 
-bot.command :doge do |event|
-  doge(event)
-end
-
-bot.command :犬 do |event|
-  doge(event)
-end
-
-bot.command :イッヌ do |event|
-  doge(event)
-end
+bot.command [:doge, :犬, :イッヌ] { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
-bot.command :今何人 do |event|
-  event.respond "#{event.user.mention} ここのメンバーはいま #{event.server.member_count}人だよーん"
-end
+bot.command [:今何人] { |event| event.respond "#{event.user.mention} ここのメンバーはいま #{event.server.member_count}人だよーん" }
 
-bot.message(containing: "ボットよ！バランスを確認せよ！") do |event|
-  event.respond ",balance"
-end
+bot.message(containing: "ボットよ！バランスを確認せよ！") { |event| event.respond ",balance" }
 
 bot.message(containing: ",register") do |event|
   bs = event.server.text_channels.select { |c| c.name == "bot_spam2" }.first
