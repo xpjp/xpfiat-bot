@@ -119,13 +119,12 @@ end
 # -----------------------------------------------------------------------------
 # 雑談対話Bot
 bot.command :talk_ai do |event, param1|
-  i = rand(1..3)
-  case i
-  when 1 then
+  case rand(1..3)
+  when 1
     xp_talk1(event,param1)
-  when 2 then
+  when 2
     xp_talk2(event,param1)
-  when 3 then
+  when 3
     xp_talk3(event,param1)
   end
 end
