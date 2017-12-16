@@ -20,11 +20,11 @@ end
 
 # -----------------------------------------------------------------------------
 def read_price(coin_name)
-  response = Mechanize.new.get(get_url(coin_name))
+  response = Mechanize.new.get(read_url(coin_name))
   perse_json(coin_name, JSON.parse(response.body))
 end
 
-def get_url(coin_name)
+def read_url(coin_name)
   case coin_name
   when :xp_doge
     "https://www.coinexchange.io/api/v1/getmarketsummary?market_id=137"
