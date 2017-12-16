@@ -43,37 +43,35 @@ end
 # -----------------------------------------------------------------------------
 # Xp->Jpyの換算
 
-def read_price(coin_name)
-  response = Mechanize.new.get(read_url(coin_name))
-  read_price_from_json(coin_name, JSON.parse(response.body))
+def xp_doge
+  a = Mechanize.new
+  r = a.get("https://www.coinexchange.io/api/v1/getmarketsummary?market_id=137")
+  j = JSON.parse(r.body)
+
+  j["result"]["LastPrice"]
 end
 
-def read_url(coin_name)
-  case coin_name
-  when :xp_doge
-    "https://www.coinexchange.io/api/v1/getmarketsummary?market_id=137"
-  when :doge_btc
-    "https://poloniex.com/public?command=returnTicker"
-  when :btc_jpy
-    "https://coincheck.com/api/rate/btc_jpy"
-  end
+def doge_btc
+  a = Mechanize.new
+  r = a.get("https://poloniex.com/public?command=returnTicker")
+  j = JSON.parse(r.body)
+
+  j["BTC_DOGE"]["last"]
 end
 
-def read_price_from_json(coin_name, json)
-  case coin_name
-  when :xp_doge
-    json["result"]["LastPrice"]
-  when :doge_btc
-    json["BTC_DOGE"]["last"]
-  when :btc_jpy
-    json["rate"]
-  end
+def btc_jpy
+  # BTC/JPY
+  a = Mechanize.new
+  r = a.get("https://coincheck.com/api/rate/btc_jpy")
+  j = JSON.parse(r.body)
+
+  j["rate"]
 end
 
 def xp_jpy
-  xp_doge = read_price(:xp_doge)
-  doge_btc = read_price(:doge_btc)
-  btc_jpy = read_price(:btc_jpy)
+  xp_doge = xp_doge()
+  doge_btc = doge_btc()
+  btc_jpy = btc_jpy()
   xp_btc = doge_btc.to_f * xp_doge.to_f
   xp_jpy = btc_jpy.to_f * xp_btc.to_f
   xp_jpy
@@ -129,7 +127,13 @@ def how_rain(event, max_history)
 end
 
 # -----------------------------------------------------------------------------
-bot.message(containing: "はよ！") { |event| event.respond "#{event.user.mention} __***SOON!***__" }
+bot.message(containing: "はよ！") do |event|
+  if event.content.include?("おはよ！")
+    event.respond "#{event.user.mention} __***MOON!***__"
+  else
+    event.respond "#{event.user.mention} __***SOON!***__"
+  end
+end
 
 # -----------------------------------------------------------------------------
 # CoinExchange.io
@@ -194,7 +198,7 @@ bot.command [:諭吉, :yk] { |event| event.respond "#{event.user.mention} #{say_
 
 # -----------------------------------------------------------------------------
 def doge(event)
-  d = read_price(:xp_doge)
+  d = xp_doge
   amount = 1.0 / d.to_f
   event.respond "#{event.user.mention} イッヌ「わい一匹で、#{amount.to_i} くらいXPが買えるワン」"
 end
