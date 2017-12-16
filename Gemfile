@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-source 'https://rubygems.org'
 
-gem 'discordrb'
-gem 'mechanize'
-gem 'json'
-gem 'dotenv'
-gem 'rubocop', group: :development
-gem 'rspec', group: :test
+gem "discordrb"
+gem "dotenv"
+gem "json"
+gem "mechanize"
+gem "rspec", group: :test
+gem "rubocop", group: :development
