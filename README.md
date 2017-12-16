@@ -1,5 +1,7 @@
 # XP to Fiat Discord bot script
 
+[![Build Status](https://travis-ci.org/xpjp/xpfiat-bot.svg?branch=master)][travis]
+
 ## Usage
 
 1. 依存Gemインストール
