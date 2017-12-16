@@ -17,7 +17,7 @@ AsciiComments:
   Enabled: false
 
 # private/protected は一段深くインデントする
-Style/IndentationConsistency:
+Layout/IndentationConsistency:
   EnforcedStyle: rails
 
 # 1 行の最大文字数。
