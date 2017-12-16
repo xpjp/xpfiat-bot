@@ -120,6 +120,33 @@ def how_rain(event, max_history)
 end
 
 # -----------------------------------------------------------------------------
+# 雑談対話Bot
+bot.command :talk_ai do |event, message|
+  return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
+
+  case rand(1..3)
+  when 1
+    docomo_talk(event:event, message:message, name:"Xp様", type:"10")
+  when 2
+    docomo_talk(event:event, message:message, name:"浪速のおっちゃん", type:"20")
+  when 3
+    docomo_talk(event:event, message:message, name:"赤さん", type:"30")
+  end
+end
+
+def docomo_talk(event:, message:, name:, type:)
+  body = {
+    utt: message,
+    mode: "dialog",
+    t:type
+  }.to_json
+  api_key = ENV["DOCOMO_TALK_APIKEY"]
+  response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
+  utt = JSON.parse(response.body)["utt"]
+  event.send_message("#{name}「#{utt} 」")
+end
+
+# -----------------------------------------------------------------------------
 bot.message(containing: "はよ！") { |event| event.respond "#{event.user.mention} __***SOON!***__" }
 
 # -----------------------------------------------------------------------------
