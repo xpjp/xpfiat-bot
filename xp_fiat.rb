@@ -71,12 +71,7 @@ def read_price_from_json(coin_name, json)
 end
 
 def xp_jpy
-  xp_doge = read_price(:xp_doge)
-  doge_btc = read_price(:doge_btc)
-  btc_jpy = read_price(:btc_jpy)
-  xp_btc = doge_btc.to_f * xp_doge.to_f
-  xp_jpy = btc_jpy.to_f * xp_btc.to_f
-  xp_jpy
+  read_price(:xp_doge) * read_price(:doge_btc) * read_price(:btc_jpy)
 end
 
 # -----------------------------------------------------------------------------
@@ -97,15 +92,11 @@ bot.command [:xp_jpy, :いくら] { |event, param1| xp2jpy(event, param1) }
 
 # -----------------------------------------------------------------------------
 bot.command :どれだけ買える do |event, param1|
-  if param1.nil? || param1.empty? || param1.to_f <= 0
-    event.respond "#{event.user.mention} 金額を正しく指定してね :satisfied:"
-  else
-    # TODO: 同じメソッドがある
-    xp_jpy = xp_jpy()
-    yen = param1.to_f
+  if (yen = param1.to_f).positive?
     amount = yen / xp_jpy
-
     event.respond "#{event.user.mention} #{yen.to_i}円で #{amount.to_i}XPくらい買えるよ"
+  else
+    event.respond "#{event.user.mention} 金額を正しく指定してね :satisfied:"
   end
 end
 
@@ -168,9 +159,7 @@ end
 
 # -----------------------------------------------------------------------------
 def how_much(amount)
-  xp_jpy = xp_jpy()
-  jpy = amount / xp_jpy
-  jpy.to_i
+  (amount / xp_jpy).to_i
 end
 
 # -----------------------------------------------------------------------------
