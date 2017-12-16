@@ -135,11 +135,11 @@ bot.command :talk_ai do |event, message|
 
   case rand(1..3)
   when 1
-    docomo_talk(event, message, name:"Xp様", type:"10")
+    docomo_talk(event:event, message:message, name:"Xp様", type:"10")
   when 2
-    docomo_talk(event, message, name:"浪速のおっちゃん", type:"20")
+    docomo_talk(event:event, message:message, name:"浪速のおっちゃん", type:"20")
   when 3
-    docomo_talk(event, message, name:"赤さん", type:"30")
+    docomo_talk(event:event, message:message, name:"赤さん", type:"30")
   end
 end
 
