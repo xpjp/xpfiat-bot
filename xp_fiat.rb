@@ -119,6 +119,11 @@ end
 # -----------------------------------------------------------------------------
 # 雑談対話Bot
 bot.command :talk_ai do |event, param1|
+  if param1.nil?
+    event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」")
+    return
+  end
+
   case rand(1..3)
   when 1
     docomo_talk(event,param1,"Xp様","10")
