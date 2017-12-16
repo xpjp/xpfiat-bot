@@ -17,6 +17,29 @@ module JoinAnnouncer
 end
 
 # -----------------------------------------------------------------------------
+# TODO:新しいコマンド追加した場合は下記ヘルプに追加して下さい。
+bot.command :help do |event|
+  event.channel.send_embed do |embed|
+    help = <<-"EOS"
+      Commands:
+      ?xp_jpy 1XPの日本円換算
+      ?xp_jpy [amount] amount分のXPの日本円換算
+      ?どれだけ買える [amount] 日本円でどれだけ買えるか
+      ?ce CoinExhangeのXP/DOGE
+      ?cn CoinsMarketsのXP/DOGE
+      ?ng or ?野口 千円で買えるXPの量
+      ?hg or ?樋口 五千円で買えるXPの量
+      ?yk or ?諭吉 一万円で買えるXPの量
+      ?doge or ?犬 1DOGEで買えるXPの量
+    EOS
+
+    embed.description = help
+  end
+end
+
+# -----------------------------------------------------------------------------
+# Xp->Jpyの換算
+
 def xp_doge
   a = Mechanize.new
   r = a.get("https://www.coinexchange.io/api/v1/getmarketsummary?market_id=137")
@@ -86,13 +109,7 @@ bot.command :どれだけ買える do |event, param1|
   end
 end
 
-# -----------------------------------------------------------------------------
-# TODO:直す
-bot.command :help do |event|
-  event.channel.send_embed do |embed|
-    embed.description = "Commands:\n?xp_jpy 1XPの日本円換算\n?xp_jpy [amount] amount分のXPの日本円換算\n?どれだけ買える [amount] 日本円でどれだけ買えるか\n?ce CoinExhangeのXP/DOGE\n?cn CoinsMarketsのXP/DOGE\n?ng or ?野口 千円で買えるXPの量\n?hg or ?樋口 五千円で買えるXPの量\n?yk or ?諭吉 一万円で買えるXPの量\n?doge or ?犬 1DOGEで買えるXPの量"
-  end
-end
+
 
 # -----------------------------------------------------------------------------
 # 降雨量Bot
