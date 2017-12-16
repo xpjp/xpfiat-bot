@@ -131,12 +131,12 @@ end
 
 def docomo_talk(event,param1,name,type)
   unless param1.nil?
-    a = Mechanize.new
+    agent = Mechanize.new
     body = {
       utt: param1,
       mode: "dialog"
     }.to_json
-    response = a.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=427a43726d38505579494b4c585a2f634b6e34322f476f4c373876534168774c4a394f692f52656b44362f", body)
+    response = agent.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=427a43726d38505579494b4c585a2f634b6e34322f476f4c373876534168774c4a394f692f52656b44362f", body)
     utt = JSON.parse(response.body)["utt"]
     event.send_message("#{name}「#{utt} 」")
   end
