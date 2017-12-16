@@ -1,0 +1,7 @@
+sudo: false
+language: ruby
+rvm:
+  - 2.4.3
+bundler_args: "-j4"
+cache: bundler
+script: echo 'Hello, Trabis'
