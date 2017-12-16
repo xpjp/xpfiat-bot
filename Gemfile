@@ -5,4 +5,4 @@ gem "dotenv"
 gem "json"
 gem "mechanize"
 gem "rspec", group: :test
-gem "rubocop", group: :development
+gem "rubocop", group: [:development, :test]
