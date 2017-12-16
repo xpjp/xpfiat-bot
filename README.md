@@ -1,5 +1,9 @@
 # XP to Fiat Discord bot script
 
+ようこそ！初めての方は以下をご覧ください。
+
+[開発ガイドライン](https://github.com/xpjp/xpfiat-bot/wiki/%E9%96%8B%E7%99%BA%E3%82%AC%E3%82%A4%E3%83%89%E3%83%A9%E3%82%A4%E3%83%B3)
+
 ## Usage
 
 1. 依存Gemインストール
