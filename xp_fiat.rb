@@ -132,7 +132,7 @@ end
 # default
 def xp_talk1(event,param1)
   p param1
-  if !param1.nil?
+  unless param1.nil?
     a = Mechanize.new
     body = {
       utt: param1,
