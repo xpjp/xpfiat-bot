@@ -105,6 +105,7 @@ bot.command :どれだけ買える do |event, param1|
   if param1.nil? || param1.empty? || param1.to_f <= 0
     event.respond "#{event.user.mention} 金額を正しく指定してね :satisfied:"
   else
+    # TODO: 同じメソッドがある
     xp_jpy = xp_jpy()
     yen = param1.to_f
     amount = yen / xp_jpy
