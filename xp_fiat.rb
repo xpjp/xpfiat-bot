@@ -202,7 +202,7 @@ end
 bot.command [:doge, :犬, :イッヌ] { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
-bot.command [:今何人] { |event| event.respond "#{event.user.mention} :xpchan01:＜ ここのコミュニティには今 #{event.server.member_count}人いるよ〜" }
+bot.command [:今何人] { |event| event.respond "#{event.user.mention} :xpchan01:＜ ここには今#{event.server.member_count}人いるよ〜" }
 
 bot.message(containing: "ボットよ！バランスを確認せよ！") { |event| event.respond ",balance" }
 
