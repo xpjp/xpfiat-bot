@@ -1,0 +1,38 @@
+AllCops:
+  TargetRubyVersion: 2.4
+  Exclude:
+    - "vendor/**/*" # rubocop config/default.yml
+
+# spec ファイルが膨らむことは許可する
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+
+# 文字列はダブルクオートで統一する
+StringLiterals:
+  EnforcedStyle: double_quotes
+
+# 日本語のコメントも許可
+AsciiComments:
+  Enabled: false
+
+# private/protected は一段深くインデントする
+Style/IndentationConsistency:
+  EnforcedStyle: rails
+
+# 1 行の最大文字数。
+Metrics/LineLength:
+  Max: 120
+
+# メソッドの最大行数
+Style/MethodLength:
+  Max: 20
+  CountComments: false
+
+# "Missing top-level class documentation comment."を無効
+Style/Documentation:
+  Enabled: false
+
+# 変数名の先頭のアンダースコアを許可する
+Lint/UnderscorePrefixedVariableName:
+  Enabled: false
