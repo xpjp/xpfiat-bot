@@ -129,7 +129,7 @@ end
 # -----------------------------------------------------------------------------
 # 雑談対話Bot
 bot.command :talk_ai do |event, message|
-  return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if param1.nil?
+  return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
 
   case rand(1..3)
   when 1
