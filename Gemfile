@@ -5,4 +5,4 @@ gem 'discordrb'
 gem 'mechanize'
 gem 'json'
 gem 'dotenv'
-gem 'rspec'
+gem 'rspec', group: :test
