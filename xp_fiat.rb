@@ -121,64 +121,24 @@ end
 bot.command :talk_ai do |event, param1|
   case rand(1..3)
   when 1
-    xp_talk1(event,param1)
+    docomo_talk(event,param1,"Xp様","10")
   when 2
-    xp_talk2(event,param1)
+    docomo_talk(event,param1,"浪速のおっちゃん","20")
   when 3
-    xp_talk3(event,param1)
+    docomo_talk(event,param1,"赤さん","30")
   end
 end
 
-# default
-def xp_talk1(event,param1)
-  p param1
+def docomo_talk(event,param1,name,type)
   unless param1.nil?
     a = Mechanize.new
     body = {
       utt: param1,
       mode: "dialog"
     }.to_json
-    p body
     response = a.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=427a43726d38505579494b4c585a2f634b6e34322f476f4c373876534168774c4a394f692f52656b44362f", body)
-    j = JSON.parse(response.body)
-    utt = j["utt"]
-    event.send_message("Xp様「#{utt} 」")
-  end
-end
-
-# 関西弁
-def xp_talk2(event,param1)
-  p param1
-  if !param1.nil?
-    a = Mechanize.new
-    body = {
-      utt: param1,
-      mode: "dialog",
-      t:20
-    }.to_json
-    p body
-    response = a.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=427a43726d38505579494b4c585a2f634b6e34322f476f4c373876534168774c4a394f692f52656b44362f", body)
-    j = JSON.parse(response.body)
-    utt = j["utt"]
-    event.send_message("浪速のおっちゃん「#{utt} 」")
-  end
-end
-
-# 赤ちゃん
-def xp_talk3(event,param1)
-  p param1
-  if !param1.nil?
-    a = Mechanize.new
-    body = {
-      utt: param1,
-      mode: "dialog",
-      t:30
-    }.to_json
-    p body
-    response = a.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=427a43726d38505579494b4c585a2f634b6e34322f476f4c373876534168774c4a394f692f52656b44362f", body)
-    j = JSON.parse(response.body)
-    utt = j["utt"]
-    event.send_message("赤さん「#{utt} 」")
+    utt = JSON.parse(response.body)["utt"]
+    event.send_message("#{name}「#{utt} 」")
   end
 end
 
