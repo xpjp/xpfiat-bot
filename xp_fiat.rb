@@ -19,35 +19,37 @@ module JoinAnnouncer
 end
 
 # -----------------------------------------------------------------------------
-def xp_doge
-  a = Mechanize.new
-  r = a.get("https://www.coinexchange.io/api/v1/getmarketsummary?market_id=137")
-  j = JSON.parse(r.body)
-
-  j["result"]["LastPrice"]
+def check_price(coin_name)
+  response = Mechanize.new.get(get_url(coin_name))
+  perse_json(coin_name, JSON.parse(response.body))
 end
 
-def doge_btc
-  a = Mechanize.new
-  r = a.get("https://poloniex.com/public?command=returnTicker")
-  j = JSON.parse(r.body)
-
-  j["BTC_DOGE"]["last"]
+def get_url(coin_name)
+  case coin_name
+  when :xp_doge
+    "https://www.coinexchange.io/api/v1/getmarketsummary?market_id=137"
+  when :doge_btc
+    "https://poloniex.com/public?command=returnTicker"
+  when :btc_jpy
+    "https://coincheck.com/api/rate/btc_jpy"
+  end
 end
 
-def btc_jpy
-  # BTC/JPY
-  a = Mechanize.new
-  r = a.get("https://coincheck.com/api/rate/btc_jpy")
-  j = JSON.parse(r.body)
-
-  j["rate"]
+def perse_json(coin_name, json)
+  case coin_name
+  when :xp_doge
+    json["result"]["LastPrice"]
+  when :doge_btc
+    json["BTC_DOGE"]["last"]
+  when :btc_jpy
+    json["rate"]
+  end
 end
 
 def xp_jpy
-  xp_doge = xp_doge()
-  doge_btc = doge_btc()
-  btc_jpy = btc_jpy()
+  xp_doge = check_price(:xp_doge)
+  doge_btc = check_price(:doge_btc)
+  btc_jpy = check_price(:btc_jpy)
   xp_btc = doge_btc.to_f * xp_doge.to_f
   xp_jpy = btc_jpy.to_f * xp_btc.to_f
   xp_jpy
@@ -175,7 +177,7 @@ bot.command [:諭吉, :yk] { |event| event.respond "#{event.user.mention} #{say_
 
 # -----------------------------------------------------------------------------
 def doge(event)
-  d = xp_doge
+  d = check_price(:xp_doge)
   amount = 1.0 / d.to_f
   event.respond "#{event.user.mention} イッヌ「わい一匹で、#{amount.to_i} くらいXPが買えるワン」"
 end
