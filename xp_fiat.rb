@@ -76,8 +76,6 @@ def xp_jpy
 end
 
 # -----------------------------------------------------------------------------
-# Xp->Jpyの換算の出力
-
 def xp2jpy(event,param1)
   message = ":satisfied:"
   if !param1.nil? && param1.to_f > 0
@@ -100,8 +98,6 @@ bot.command :いくら do |event, param1|
 end
 
 # -----------------------------------------------------------------------------
-# n円でXPがどれだけ買えるか。
-
 bot.command :どれだけ買える do |event, param1|
   if param1.nil? || param1.empty? || param1.to_f <= 0
     event.respond "#{event.user.mention} 金額を正しく指定してね :satisfied:"
@@ -140,16 +136,12 @@ def how_rain(event, max_history)
 end
 
 # -----------------------------------------------------------------------------
-# 【隠しコマンド】はよ！
-
 bot.message(containing: "はよ！") do |event|
   event.respond "#{event.user.mention} __***SOON!***__"
 end
 
 # -----------------------------------------------------------------------------
 # CoinExchange.io
-# Xp/Dogeの板情報(CoinExchange)
-
 bot.command :ce do |event|
   a = Mechanize.new
   r = a.get("https://www.coinexchange.io/api/v1/getmarketsummary?market_id=137")
@@ -167,8 +159,6 @@ end
 
 # -----------------------------------------------------------------------------
 # CoinsMarkets
-# Xp/Dogeの板情報(CoinsMarkets)
-
 bot.command :cm do |event|
   a = Mechanize.new
   r = a.get("https://coinsmarkets.com/apicoin.php")
@@ -186,8 +176,6 @@ bot.command :cm do |event|
 end
 
 # -----------------------------------------------------------------------------
-# [amount]円でXpがいくら買えるか。
-
 def how_much(amount)
   xp_jpy = xp_jpy()
   jpy = amount / xp_jpy
@@ -195,12 +183,22 @@ def how_much(amount)
 end
 
 # -----------------------------------------------------------------------------
-# 野口コマンド(野口換算で、Xpがいくつ買えるか)
 def noguchi(event)
   amount = how_much(1000)
   event.respond "#{event.user.mention} 野口「私の肖像画一枚で、#{amount.to_i} XPが買える」"
 end
 
+def higuchi(event)
+  amount = how_much(5000)
+  event.respond "#{event.user.mention} 樋口「私の肖像画一枚で、#{amount.to_i} XPが買える」"
+end
+
+def yukichi(event)
+  amount = how_much(10000)
+  event.respond "#{event.user.mention} 諭吉「私の肖像画一枚で、#{amount.to_i} XPが買える」"
+end
+
+# -----------------------------------------------------------------------------
 bot.command :野口 do |event|
   noguchi(event)
 end
@@ -209,27 +207,11 @@ bot.command :ng do |event|
   noguchi(event)
 end
 
-# -----------------------------------------------------------------------------
-# 樋口コマンド(樋口換算で、Xpがいくつ買えるか)
-
-def higuchi(event)
-  amount = how_much(5000)
-  event.respond "#{event.user.mention} 樋口「私の肖像画一枚で、#{amount.to_i} XPが買える」"
-end
-
 bot.command :樋口 do |event|
   higuchi(event)
 end
 bot.command :hg do |event|
   higuchi(event)
-end
-
-# -----------------------------------------------------------------------------
-# 諭吉コマンド(諭吉換算で、Xpがいくつ買えるか)
-
-def yukichi(event)
-  amount = how_much(10000)
-  event.respond "#{event.user.mention} 諭吉「私の肖像画一枚で、#{amount.to_i} XPが買える」"
 end
 
 bot.command :諭吉 do |event|
@@ -240,7 +222,6 @@ bot.command :yk do |event|
 end
 
 # -----------------------------------------------------------------------------
-# Dogeコマンド(Doge換算で、Xpがいくつ買えるか)
 def doge(event)
   d = xp_doge()
   amount = 1.0 / d.to_f
@@ -260,29 +241,18 @@ bot.command :イッヌ do |event|
 end
 
 # -----------------------------------------------------------------------------
-# コミュニティーのメンバー数を出力
-
 bot.command :今何人 do |event|
   event.respond "#{event.user.mention} ここのメンバーはいま #{event.server.member_count}人だよーん"
 end
-
-# -----------------------------------------------------------------------------
-# バランスコマンドのalias
 
 bot.message(containing: "ボットよ！バランスを確認せよ！") do |event|
   event.respond ",balance"
 end
 
-# -----------------------------------------------------------------------------
-# Registerコマンドのresponse対応
-
 bot.message(containing: ",register") do |event|
   bs = event.server.text_channels.select { |c| c.name == "bot_spam2" }.first
   event.respond "#{event.user.mention} ウォレットは登録されました。 #{bs.mention} で`,balance`をして確認してください。"
 end
-
-# -----------------------------------------------------------------------------
-# Botの実行
 
 bot.include! JoinAnnouncer
 bot.include! CommandPatroller
