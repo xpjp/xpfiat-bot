@@ -21,7 +21,7 @@ end
 # -----------------------------------------------------------------------------
 def read_price(coin_name)
   response = Mechanize.new.get(read_url(coin_name))
-  perse_json(coin_name, JSON.parse(response.body))
+  read_price_from_json(coin_name, JSON.parse(response.body))
 end
 
 def read_url(coin_name)
@@ -35,7 +35,7 @@ def read_url(coin_name)
   end
 end
 
-def perse_json(coin_name, json)
+def read_price_from_json(coin_name, json)
   case coin_name
   when :xp_doge
     json["result"]["LastPrice"]
