@@ -4,5 +4,8 @@ gem "discordrb"
 gem "dotenv"
 gem "json"
 gem "mechanize"
-gem "rspec", group: :test
-gem "rubocop", group: :development
+
+group :development, :test do
+  gem "rspec"
+  gem "rubocop"
+end
