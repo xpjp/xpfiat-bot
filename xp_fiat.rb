@@ -135,7 +135,7 @@ end
 bot.command [:talk_ai, :話そう？, :話そう?, :ta] { |event, message| talk(event, message) }
 bot.command [:Xp様, :お話しましょう] { |event, message| docomo_talk(event:event, message:message, name:"Xp様", type:"10") }
 bot.command [:おっちゃん, :話しようぜ] { |event, message| docomo_talk(event:event, message:message, name:"浪速のおっちゃん", type:"20") }
-bot.command [:赤さん, :はなししたいでちゅ] { |event, message| docomo_talk(event:event, message:message, name:"赤さん", type:"30") }
+bot.command [:赤さん, :はなししたいでちゅ, :おはなちちたいでちゅ] { |event, message| docomo_talk(event:event, message:message, name:"赤さん", type:"30") }
 
 def talk(event, message)
   return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
