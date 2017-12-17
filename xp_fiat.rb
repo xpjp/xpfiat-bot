@@ -132,10 +132,21 @@ end
 # -----------------------------------------------------------------------------
 # 雑談対話Bot
 
-bot.command [:talk_ai, :話そう？, :話そう?, :ta] { |event, message| talk(event, message) }
-bot.command [:Xp様, :お話しましょう] { |event, message| docomo_talk(event: event, message: message, name: "Xp様", type: "10") }
-bot.command [:おっちゃん, :話しようぜ] { |event, message| docomo_talk(event: event, message: message, name: "浪速のおっちゃん", type: "20") }
-bot.command [:赤さん, :はなししたいでちゅ, :おはなちちたいでちゅ] { |event, message| docomo_talk(event: event, message: message, name: "赤さん", type: "30") }
+bot.command [:talk_ai, :話そう？, :話そう?, :ta] do |event, message|
+  talk(event, message)
+end
+
+bot.command [:Xp様, :お話しましょう] do |event, message|
+  docomo_talk(event: event, message: message, name: "Xp様", type: "10")
+end
+
+bot.command [:おっちゃん, :話しようぜ] do |event, message|
+  docomo_talk(event: event, message: message, name: "浪速のおっちゃん", type: "20")
+end
+
+bot.command [:赤さん, :はなししたいでちゅ, :おはなちちたいでちゅ] do |event, message|
+  docomo_talk(event: event, message: message, name: "赤さん", type: "30")
+end
 
 def talk(event, message)
   return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
@@ -154,7 +165,7 @@ def docomo_talk(event:, message:, name:, type:)
   body = {
     utt: message,
     mode: "dialog",
-    t:type
+    t: type
   }.to_json
   api_key = ENV["DOCOMO_TALK_APIKEY"]
   response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
