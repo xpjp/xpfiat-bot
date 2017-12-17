@@ -71,7 +71,7 @@ def read_price_from_json(coin_name, json)
 end
 
 def xp_jpy
-  read_price(:xp_doge) * read_price(:doge_btc) * read_price(:btc_jpy)
+  read_price(:xp_doge).to_f * read_price(:doge_btc).to_f * read_price(:btc_jpy).to_f
 end
 
 # -----------------------------------------------------------------------------
