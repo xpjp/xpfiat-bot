@@ -5,6 +5,7 @@ require "mechanize"
 require "json"
 require "./command_patroller"
 require "dotenv/load"
+require 'uri'
 
 bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix: ["?", "？"]
 
@@ -153,6 +154,28 @@ def docomo_talk(event:, message:, name:, type:)
   response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
   utt = JSON.parse(response.body)["utt"]
   event.send_message("#{name}「#{utt} 」")
+end
+
+# -----------------------------------------------------------------------------
+# trend返却(docomo)
+
+bot.command :trend do |event, keyword|
+  docomo_trend(event: event, keyword: keyword)
+end
+
+def docomo_trend(event:, keyword:)
+  api_key = ENV["DOCOMO_TREND_APIKEY"]
+  url = "https://api.apigw.smt.docomo.ne.jp/webCuration/v3/search?keyword=#{keyword}&APIKEY=#{api_key}"
+  url_escape = URI.escape(url)
+  response = Mechanize.new.get(url_escape)
+  articleContents = JSON.parse(response.body)["articleContents"]
+  if articleContents.length > 0
+    title = articleContents[0]["contentData"]["title"]
+    linkUrl = articleContents[0]["contentData"]["linkUrl"]
+    event.send_message("【#{title}】\n#{linkUrl} ")
+  else
+    event.send_message("いい記事なかったよ。")
+  end
 end
 
 # -----------------------------------------------------------------------------
