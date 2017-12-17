@@ -169,7 +169,11 @@ def docomo_trend(event, keyword)
   url_escape = URI.escape(url)
 
   response = Mechanize.new.get(url_escape)
+  message = get_trend_message(response)
+  event.send_message(message)
+end
 
+def get_trend_message(response)
   article_contents = JSON.parse(response.body)["articleContents"]
   message = "いい記事なかったよ。"
   unless article_contents.empty?
@@ -178,7 +182,6 @@ def docomo_trend(event, keyword)
     link_url = content_data["linkUrl"]
     message = "【#{title}】\n#{link_url} "
   end
-  event.send_message(message)
 end
 
 # -----------------------------------------------------------------------------
