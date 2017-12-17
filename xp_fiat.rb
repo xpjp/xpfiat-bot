@@ -131,7 +131,10 @@ end
 
 # -----------------------------------------------------------------------------
 # 雑談対話Bot
-bot.command :talk_ai do |event, message|
+
+bot.command [:talk_ai, :話そう？, :話そう?, :ta] { |event, message| talk(event, message) }
+
+def talk(event, message)
   return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
 
   case rand(1..3)
