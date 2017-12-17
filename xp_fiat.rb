@@ -219,7 +219,7 @@ bot.command [:諭吉, :yk] { |event| event.respond "#{event.user.mention} #{say_
 # -----------------------------------------------------------------------------
 def doge(event)
   d = read_price(:xp_doge)
-  amount = 1.0 / d.to_f
+  amount = 1.0 / d
   event.respond "#{event.user.mention} イッヌ「わい一匹で、#{amount.to_i} くらいXPが買えるワン」"
 end
 
