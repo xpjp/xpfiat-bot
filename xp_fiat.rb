@@ -34,6 +34,7 @@ bot.command :help do |event|
       ?yk or ?諭吉 一万円で買えるXPの量
       ?doge or ?犬 1DOGEで買えるXPの量
       ?how_rain 降雨量の追加(直近100メッセージ)
+      ?talk_ai [message] AIと対話できます
     HEREDOC
 
     embed.description = help
