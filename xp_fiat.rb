@@ -5,8 +5,7 @@ require "mechanize"
 require "json"
 require "./command_patroller"
 require "dotenv/load"
-require 'cgi'
-require 'uri'
+require "uri"
 
 bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix: ["?", "？"]
 
@@ -172,14 +171,14 @@ def docomo_trend(event, keyword)
   response = Mechanize.new.get(url_escape)
 
   article_contents = JSON.parse(response.body)["articleContents"]
+  message = "いい記事なかったよ。"
   unless article_contents.empty?
     content_data = article_contents[0]["contentData"]
     title = content_data["title"]
     link_url = content_data["linkUrl"]
-    event.send_message("【#{title}】\n#{link_url} ")
-  else
-    event.send_message("いい記事なかったよ。")
+    message = "【#{title}】\n#{link_url} "
   end
+  event.send_message(message)
 end
 
 # -----------------------------------------------------------------------------
