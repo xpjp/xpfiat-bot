@@ -60,14 +60,16 @@ def read_url(coin_name)
 end
 
 def read_price_from_json(coin_name, json)
-  case coin_name
-  when :xp_doge
-    json["result"]["LastPrice"].to_f
-  when :doge_btc
-    json["BTC_DOGE"]["last"].to_f
-  when :btc_jpy
-    json["rate"].to_f
-  end
+  price =
+    case coin_name
+    when :xp_doge
+      json["result"]["LastPrice"]
+    when :doge_btc
+      json["BTC_DOGE"]["last"]
+    when :btc_jpy
+      json["rate"]
+    end
+  price.to_f
 end
 
 def xp_jpy
