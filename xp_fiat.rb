@@ -45,7 +45,7 @@ end
 
 def read_price(coin_name)
   response = Mechanize.new.get(read_url(coin_name))
-  read_price_from_json(coin_name, JSON.parse(response.body))
+  read_price_from_json(coin_name, JSON.parse(response.body)).to_f
 end
 
 def read_url(coin_name)
@@ -60,16 +60,14 @@ def read_url(coin_name)
 end
 
 def read_price_from_json(coin_name, json)
-  price =
-    case coin_name
-    when :xp_doge
-      json["result"]["LastPrice"]
-    when :doge_btc
-      json["BTC_DOGE"]["last"]
-    when :btc_jpy
-      json["rate"]
-    end
-  price.to_f
+  case coin_name
+  when :xp_doge
+    json["result"]["LastPrice"]
+  when :doge_btc
+    json["BTC_DOGE"]["last"]
+  when :btc_jpy
+    json["rate"]
+  end
 end
 
 def xp_jpy
