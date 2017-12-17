@@ -177,7 +177,7 @@ def get_trend_message(response)
   content_data = article_contents[0]["contentData"]
   title = content_data["title"]
   link_url = content_data["linkUrl"]
-  message = "【#{title}】\n#{link_url} "
+  "【#{title}】\n#{link_url} "
 end
 
 # -----------------------------------------------------------------------------
