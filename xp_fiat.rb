@@ -120,6 +120,15 @@ def how_rain(event, max_history)
 end
 
 # -----------------------------------------------------------------------------
+bot.message(containing: "はよ！") do |event|
+  if event.content.include?("おはよ！")
+    event.respond "#{event.user.mention} __***MOON!***__"
+  else
+    event.respond "#{event.user.mention} __***SOON!***__"
+  end
+end
+
+# -----------------------------------------------------------------------------
 # 雑談対話Bot
 bot.command :talk_ai do |event, message|
   return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
@@ -145,9 +154,6 @@ def docomo_talk(event:, message:, name:, type:)
   utt = JSON.parse(response.body)["utt"]
   event.send_message("#{name}「#{utt} 」")
 end
-
-# -----------------------------------------------------------------------------
-bot.message(containing: "はよ！") { |event| event.respond "#{event.user.mention} __***SOON!***__" }
 
 # -----------------------------------------------------------------------------
 # CoinExchange.io
