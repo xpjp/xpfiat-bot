@@ -163,7 +163,7 @@ bot.command :trend do |event, keyword|
 end
 
 def docomo_trend(event, keyword)
-  api_key = ENV["DOCOMO_TREND_APIKEY"]
+  api_key = ENV["DOCOMO_TALK_APIKEY"]
   url = "https://api.apigw.smt.docomo.ne.jp/webCuration/v3/search?keyword=#{keyword}&APIKEY=#{api_key}"
 
   response = Mechanize.new.get(url)
