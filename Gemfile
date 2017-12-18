@@ -4,6 +4,7 @@ gem "discordrb"
 gem "dotenv"
 gem "json"
 gem "mechanize"
+gem "rmagick"
 
 group :development, :test do
   gem "rspec"

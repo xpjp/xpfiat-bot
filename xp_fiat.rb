@@ -5,6 +5,8 @@ require "mechanize"
 require "json"
 require "./command_patroller"
 require "dotenv/load"
+require "RMagick"
+require "date"
 
 bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix: ["?", "？"]
 
@@ -231,6 +233,30 @@ bot.message(containing: "ボットよ！バランスを確認せよ！") { |even
 bot.message(containing: ",register") do |event|
   bs = event.server.text_channels.select { |c| c.name == "bot_spam2" }.first
   event.respond "#{event.user.mention} ウォレットは登録されました。 #{bs.mention} で`,balance`をして確認してください。"
+end
+
+# -----------------------------------------------------------------------------
+#画像生成
+bot.command :make do |event, param1, param2|
+  path = "./img/XPchan#{DateTime.now}.png"
+  res_message = "【XPちゃん】\n  #{param1}\n  #{param2}"
+
+  img = Magick::ImageList.new("./img/original.png")
+  font = "fonts/rounded-mplus-2c-bold.ttf"
+
+  draw = Magick::Draw.new
+  draw.annotate(img, 0, 0, 300, 500, res_message) do
+    self.font = font
+    self.fill = 'white'
+    self.stroke = 'black'
+    self.stroke_width = 1
+    self.pointsize = 36
+    self.gravity = Magick::NorthWestGravity
+  end
+
+  img.write path
+  event.send_file(File.open(path, 'r'))
+  File.delete path
 end
 
 bot.include! JoinAnnouncer
