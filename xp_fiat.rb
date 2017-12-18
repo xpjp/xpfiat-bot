@@ -79,10 +79,10 @@ def xp2jpy(event, param1)
   message =
     if (amount = param1.to_f).positive?
       _xp_jpy = xp_jpy * amount
-      "#{event.user.mention} #{amount.to_i}XPはいま #{_xp_jpy} 円だよ"
+      "#{event.user.mention} :xpchan01:＜ #{amount.to_i}XPはいま #{_xp_jpy} 円だよ〜"
     else
       _xp_jpy = format("%.8f", xp_jpy)
-      "#{event.user.mention} 1XPはいま #{_xp_jpy} 円だよ"
+      "#{event.user.mention} :xpchan01:＜ 1XPはいま #{_xp_jpy} 円だよ〜"
     end
   message ||= ":satisfied:"
   event.respond message
@@ -94,9 +94,9 @@ bot.command [:xp_jpy, :いくら] { |event, param1| xp2jpy(event, param1) }
 bot.command :どれだけ買える do |event, param1|
   if (yen = param1.to_f).positive?
     amount = yen / xp_jpy
-    event.respond "#{event.user.mention} #{yen.to_i}円で #{amount.to_i}XPくらい買えるよ"
+    event.respond "#{event.user.mention} :xpchan01:＜ #{yen.to_i}円で #{amount.to_i}XPくらい買えるよ〜"
   else
-    event.respond "#{event.user.mention} 金額を正しく指定してね :satisfied:"
+    event.respond "#{event.user.mention} :xpchan01:＜ 金額を正しく指定してね〜 :satisfied:"
   end
 end
 
@@ -199,11 +199,11 @@ end
 def say_hero(name)
   case name
   when :ng
-    "野口「私の肖像画一枚で、#{how_much(1000)} XPが買える」"
+    ":noguchi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
   when :hg
-    "樋口「私の肖像画一枚で、#{how_much(5000)} XPが買える」"
+    ":higuchi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
   when :yk
-    "諭吉「私の肖像画一枚で、#{how_much(10_000)} XPが買える」"
+    ":yukichi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
   end
 end
 
@@ -218,13 +218,13 @@ bot.command [:諭吉, :yk] { |event| event.respond "#{event.user.mention} #{say_
 def doge(event)
   d = read_price(:xp_doge)
   amount = 1.0 / d
-  event.respond "#{event.user.mention} イッヌ「わい一匹で、#{amount.to_i} くらいXPが買えるワン」"
+  event.respond "#{event.user.mention} :doge:＜ わい一匹で、#{amount.to_i} くらいXPが買えるワン"
 end
 
 bot.command [:doge, :犬, :イッヌ] { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
-bot.command [:今何人] { |event| event.respond "#{event.user.mention} ここのメンバーはいま #{event.server.member_count}人だよーん" }
+bot.command [:今何人] { |event| event.respond "#{event.user.mention} :xpchan01:＜ ここには今#{event.server.member_count}人いるよ〜" }
 
 bot.message(containing: "ボットよ！バランスを確認せよ！") { |event| event.respond ",balance" }
 
