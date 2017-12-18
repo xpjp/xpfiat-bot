@@ -224,11 +224,11 @@ end
 def say_hero(name)
   case name
   when :ng
-    ":noguchi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
+    ":noguchi:＜ 私の肖像画一枚で、#{how_much(1000)} XPが買える"
   when :hg
-    ":higuchi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
+    ":higuchi:＜ 私の肖像画一枚で、#{how_much(5000)} XPが買える"
   when :yk
-    ":yukichi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
+    ":yukichi:＜ 私の肖像画一枚で、#{how_much(10_000)} XPが買える"
   end
 end
 
