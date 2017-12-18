@@ -6,7 +6,6 @@ require "json"
 require "./command_patroller"
 require "dotenv/load"
 require "RMagick"
-require "date"
 
 bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix: ["?", "？"]
 
@@ -137,11 +136,11 @@ bot.command :talk_ai do |event, message|
 
   case rand(1..3)
   when 1
-    docomo_talk(event:event, message:message, name:"Xp様", type:"10")
+    docomo_talk(event: event, message: message, name: "Xp様", type: "10")
   when 2
-    docomo_talk(event:event, message:message, name:"浪速のおっちゃん", type:"20")
+    docomo_talk(event: event, message: message, name: "浪速のおっちゃん", type: "20")
   when 3
-    docomo_talk(event:event, message:message, name:"赤さん", type:"30")
+    docomo_talk(event: event, message: message, name: "赤さん", type: "30")
   end
 end
 
@@ -149,7 +148,7 @@ def docomo_talk(event:, message:, name:, type:)
   body = {
     utt: message,
     mode: "dialog",
-    t:type
+    t: type
   }.to_json
   api_key = ENV["DOCOMO_TALK_APIKEY"]
   response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
@@ -236,9 +235,8 @@ bot.message(containing: ",register") do |event|
 end
 
 # -----------------------------------------------------------------------------
-#画像生成
 bot.command :make do |event, param1, param2|
-  path = "./img/XPchan#{DateTime.now}.png"
+  path = "./img/XPchan#{Time.now}.png"
   res_message = "【XPちゃん】\n  #{param1}\n  #{param2}"
 
   img = Magick::ImageList.new("./img/original.png")
@@ -247,15 +245,15 @@ bot.command :make do |event, param1, param2|
   draw = Magick::Draw.new
   draw.annotate(img, 0, 0, 300, 500, res_message) do
     self.font = font
-    self.fill = 'white'
-    self.stroke = 'black'
+    self.fill = "white"
+    self.stroke = "black"
     self.stroke_width = 1
     self.pointsize = 36
     self.gravity = Magick::NorthWestGravity
   end
 
   img.write path
-  event.send_file(File.open(path, 'r'))
+  event.send_file(File.open(path, "r"))
   File.delete path
 end
 
