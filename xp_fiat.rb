@@ -212,7 +212,7 @@ def call_blue_mix_translate(uri, body)
     use_ssl: uri.scheme == "https"
   }
 
-   Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+  Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
     http.request(request)
   end
 end
