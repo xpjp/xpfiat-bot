@@ -278,6 +278,10 @@ bot.command [:今何人] do |event|
   event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ ここには今#{event.server.member_count}人いるよ〜"
 end
 
+# -----------------------------------------------------------------------------
+# ping-pong
+bot.command [:ping], channels: ["bot_control"] { |event| event.respond "pong" }
+
 bot.message(containing: "ボットよ！バランスを確認せよ！") { |event| event.respond ",balance" }
 
 bot.message(containing: ",register") do |event|
