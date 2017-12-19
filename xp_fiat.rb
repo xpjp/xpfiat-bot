@@ -8,6 +8,12 @@ require "dotenv/load"
 
 bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix: ["?", "？"]
 
+# 連続のコマンド実行を制限する設定。以下は10秒以内に1回に制限する例。TODO あとでコメント直すor消す
+general_rate_limiter = Discordrb::Commands::SimpleRateLimiter.new
+general_rate_limiter.bucket(:general, limit: 1, time_span: 10, delay: 0)
+bot.include_buckets(general_rate_limiter)
+rate_limit_message = "連続して?コマンドは使えないよ。ちょっと待ってね!"
+
 module JoinAnnouncer
   extend Discordrb::EventContainer
 
@@ -246,7 +252,8 @@ def doge(event)
   event.respond "#{event.user.mention} <:doge:391497526278225920>＜ わい一匹で、#{amount.to_i} くらいXPが買えるワン"
 end
 
-bot.command [:doge, :犬, :イッヌ] { |event| doge(event) }
+# 犬系コマンドをrate_limitする例。TODO 後でコメント消す
+bot.command [:doge, :犬, :イッヌ], {rate_limit_message: rate_limit_message, bucket: :general} { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
 bot.command [:今何人] do |event|
