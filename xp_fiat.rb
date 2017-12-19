@@ -194,27 +194,26 @@ def join_sentence(sentences)
 end
 
 bot.command :jp2en do |event, *sentences|
-  blue_mix_translate(event, join_sentence(sentences), model_id:"ja-en")
+  blue_mix_translate(event, join_sentence(sentences), model: "ja-en")
 end
 
 bot.command :en2jp do |event, *sentences|
-  blue_mix_translate(event, join_sentence(sentences), model_id:"en-ja")
+  blue_mix_translate(event, join_sentence(sentences), model: "en-ja")
 end
 
-def blue_mix_translate(event, sentence, model_id:)
-
+def blue_mix_translate(event, sentence, model:)
   uri = URI.parse("https://gateway.watsonplatform.net/language-translator/api/v2/translate")
   request = Net::HTTP::Post.new(uri)
   request.basic_auth(ENV["BLUE_MIX_USER"], ENV["BLUE_MIX_PASS"])
   request.content_type = "application/json"
   request["Accept"] = "application/json"
-  request.body = JSON.dump({
-    "model_id": model_id,
+  request.body = {
+    "model_id": model,
     "text": sentence
-  })
+  }.to_json
 
   req_options = {
-    use_ssl: uri.scheme == "https",
+    use_ssl: uri.scheme == "https"
   }
 
   response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
@@ -224,8 +223,6 @@ def blue_mix_translate(event, sentence, model_id:)
   translated = JSON.parse(response.body)["translations"][0]["translation"]
   event.send_message("#{translated} ")
 end
-
-
 
 # -----------------------------------------------------------------------------
 # CoinExchange.io
