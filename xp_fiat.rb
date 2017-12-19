@@ -79,10 +79,10 @@ def xp2jpy(event, param1)
   message =
     if (amount = param1.to_f).positive?
       _xp_jpy = xp_jpy * amount
-      "#{event.user.mention} :xpchan01:＜ #{amount.to_i}XPはいま #{_xp_jpy} 円だよ〜"
+      "#{event.user.mention} <:xpchan01:391497596461645824>＜ #{amount.to_i}XPはいま #{_xp_jpy} 円だよ〜"
     else
       _xp_jpy = format("%.8f", xp_jpy)
-      "#{event.user.mention} :xpchan01:＜ 1XPはいま #{_xp_jpy} 円だよ〜"
+      "#{event.user.mention} <:xpchan01:391497596461645824>＜ 1XPはいま #{_xp_jpy} 円だよ〜"
     end
   message ||= ":satisfied:"
   event.respond message
@@ -94,9 +94,9 @@ bot.command [:xp_jpy, :いくら] { |event, param1| xp2jpy(event, param1) }
 bot.command :どれだけ買える do |event, param1|
   if (yen = param1.to_f).positive?
     amount = yen / xp_jpy
-    event.respond "#{event.user.mention} :xpchan01:＜ #{yen.to_i}円で #{amount.to_i}XPくらい買えるよ〜"
+    event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ #{yen.to_i}円で #{amount.to_i}XPくらい買えるよ〜"
   else
-    event.respond "#{event.user.mention} :xpchan01:＜ 金額を正しく指定してね〜 :satisfied:"
+    event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ 金額を正しく指定してね〜 :satisfied:"
   end
 end
 
@@ -135,11 +135,11 @@ bot.command :talk_ai do |event, message|
 
   case rand(1..3)
   when 1
-    docomo_talk(event:event, message:message, name:"Xp様", type:"10")
+    docomo_talk(event: event, message: message, name: "Xp様", type: "10")
   when 2
-    docomo_talk(event:event, message:message, name:"浪速のおっちゃん", type:"20")
+    docomo_talk(event: event, message: message, name: "浪速のおっちゃん", type: "20")
   when 3
-    docomo_talk(event:event, message:message, name:"赤さん", type:"30")
+    docomo_talk(event: event, message: message, name: "赤さん", type: "30")
   end
 end
 
@@ -147,7 +147,7 @@ def docomo_talk(event:, message:, name:, type:)
   body = {
     utt: message,
     mode: "dialog",
-    t:type
+    t: type
   }.to_json
   api_key = ENV["DOCOMO_TALK_APIKEY"]
   response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
@@ -224,11 +224,11 @@ end
 def say_hero(name)
   case name
   when :ng
-    ":noguchi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
+    "<:noguchi:391497580909035520>＜ 私の肖像画一枚で、#{how_much(1000)} XPが買える"
   when :hg
-    ":higuchi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
+    "<:higuchi:391497564291072000>＜ 私の肖像画一枚で、#{how_much(5000)} XPが買える"
   when :yk
-    ":yukichi:＜ 私の肖像画一枚で、#{amount.to_i} XPが買える"
+    "<:yukichi:391600432931274764>＜ 私の肖像画一枚で、#{how_much(10_000)} XPが買える"
   end
 end
 
@@ -243,13 +243,15 @@ bot.command [:諭吉, :yk] { |event| event.respond "#{event.user.mention} #{say_
 def doge(event)
   d = read_price(:xp_doge)
   amount = 1.0 / d
-  event.respond "#{event.user.mention} :doge:＜ わい一匹で、#{amount.to_i} くらいXPが買えるワン"
+  event.respond "#{event.user.mention} <:doge:391497526278225920>＜ わい一匹で、#{amount.to_i} くらいXPが買えるワン"
 end
 
 bot.command [:doge, :犬, :イッヌ] { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
-bot.command [:今何人] { |event| event.respond "#{event.user.mention} :xpchan01:＜ ここには今#{event.server.member_count}人いるよ〜" }
+bot.command [:今何人] do |event|
+  event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ ここには今#{event.server.member_count}人いるよ〜"
+end
 
 bot.message(containing: "ボットよ！バランスを確認せよ！") { |event| event.respond ",balance" }
 
