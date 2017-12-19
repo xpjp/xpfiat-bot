@@ -7,8 +7,15 @@ require "net/http"
 require "uri"
 require "./command_patroller"
 require "dotenv/load"
+require "rufus-scheduler"
 
 bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix: ["?", "？"]
+
+# 連続のコマンド実行を制限する設定。以下は10秒以内に1回に制限する例。TODO あとでコメント直すor消す
+general_rate_limiter = Discordrb::Commands::SimpleRateLimiter.new
+general_rate_limiter.bucket(:general, limit: 1, time_span: 10, delay: 0)
+bot.include_buckets(general_rate_limiter)
+rate_limit_message = "連続して?コマンドは使えないよ。ちょっと待ってね!"
 
 module JoinAnnouncer
   extend Discordrb::EventContainer
@@ -36,6 +43,7 @@ bot.command :help do |event|
       ?yk or ?諭吉 一万円で買えるXPの量
       ?doge or ?犬 1DOGEで買えるXPの量
       ?how_rain 降雨量の追加(直近100メッセージ)
+      ?talk_ai [message] AIと対話できます
     HEREDOC
 
     embed.description = help
@@ -132,7 +140,24 @@ end
 
 # -----------------------------------------------------------------------------
 # 雑談対話Bot
-bot.command :talk_ai do |event, message|
+
+bot.command [:talk_ai, :話そう？, :話そう?, :ta] do |event, message|
+  talk(event, message)
+end
+
+bot.command [:Xp様, :お話しましょう] do |event, message|
+  docomo_talk(event: event, message: message, name: "Xp様", type: "10")
+end
+
+bot.command [:おっちゃん, :話しようぜ] do |event, message|
+  docomo_talk(event: event, message: message, name: "浪速のおっちゃん", type: "20")
+end
+
+bot.command [:赤さん, :はなししたいでちゅ, :おはなちちたいでちゅ] do |event, message|
+  docomo_talk(event: event, message: message, name: "赤さん", type: "30")
+end
+
+def talk(event, message)
   return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
 
   case rand(1..3)
@@ -294,18 +319,30 @@ def doge(event)
   event.respond "#{event.user.mention} <:doge:391497526278225920>＜ わい一匹で、#{amount.to_i} くらいXPが買えるワン"
 end
 
-bot.command [:doge, :犬, :イッヌ] { |event| doge(event) }
+# 犬系コマンドをrate_limitする例。TODO 後でコメント消す
+bot.command [:doge, :犬, :イッヌ], {rate_limit_message: rate_limit_message, bucket: :general} { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
 bot.command [:今何人] do |event|
   event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ ここには今#{event.server.member_count}人いるよ〜"
 end
 
+# -----------------------------------------------------------------------------
+# ping-pong
+bot.command [:ping], channels: ["bot_control"] { |event| event.respond "pong" }
+
 bot.message(containing: "ボットよ！バランスを確認せよ！") { |event| event.respond ",balance" }
 
 bot.message(containing: ",register") do |event|
   bs = event.server.text_channels.select { |c| c.name == "bot_spam2" }.first
   event.respond "#{event.user.mention} ウォレットは登録されました。 #{bs.mention} で`,balance`をして確認してください。"
+end
+
+# -----------------------------------------------------------------------------
+# update BOT status periodically
+scheduler = Rufus::Scheduler.new
+scheduler.in "5m" do
+  bot.update_status(:online, "だいたい#{format("%.3f", xp_jpy)}円だよ〜", nil)
 end
 
 bot.include! JoinAnnouncer
