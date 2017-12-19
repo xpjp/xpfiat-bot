@@ -236,7 +236,7 @@ end
 
 # -----------------------------------------------------------------------------
 bot.command :make do |event, param1, param2|
-  path = "./img/XPchan#{Time.now}.png"
+  path = "./img/XPchan_#{event.user.name}_#{Time.now.to_i}.png"
   res_message = "【XPちゃん】\n  #{param1}\n  #{param2}"
 
   img = Magick::ImageList.new("./img/original.png")
@@ -255,6 +255,7 @@ bot.command :make do |event, param1, param2|
   img.write path
   event.send_file(File.open(path, "r"))
   File.delete path
+  nil
 end
 
 bot.include! JoinAnnouncer
