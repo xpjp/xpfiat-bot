@@ -5,6 +5,7 @@ require "mechanize"
 require "json"
 require "./command_patroller"
 require "dotenv/load"
+require "rufus-scheduler"
 
 bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix: ["?", "？"]
 
@@ -256,6 +257,13 @@ bot.message(containing: "ボットよ！バランスを確認せよ！") { |even
 bot.message(containing: ",register") do |event|
   bs = event.server.text_channels.select { |c| c.name == "bot_spam2" }.first
   event.respond "#{event.user.mention} ウォレットは登録されました。 #{bs.mention} で`,balance`をして確認してください。"
+end
+
+# -----------------------------------------------------------------------------
+# update BOT status periodically
+scheduler = Rufus::Scheduler.new
+scheduler.in "5m" do
+  bot.update_status(:online, "だいたい#{format("%.3f", xp_jpy)}円だよ〜", nil)
 end
 
 bot.include! JoinAnnouncer
