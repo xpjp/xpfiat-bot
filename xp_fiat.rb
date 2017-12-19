@@ -40,6 +40,7 @@ bot.command :help do |event|
       ?yk or ?諭吉 一万円で買えるXPの量
       ?doge or ?犬 1DOGEで買えるXPの量
       ?how_rain 降雨量の追加(直近100メッセージ)
+      ?talk_ai [message] AIと対話できます
     HEREDOC
 
     embed.description = help
@@ -136,7 +137,24 @@ end
 
 # -----------------------------------------------------------------------------
 # 雑談対話Bot
-bot.command :talk_ai do |event, message|
+
+bot.command [:talk_ai, :話そう？, :話そう?, :ta] do |event, message|
+  talk(event, message)
+end
+
+bot.command [:Xp様, :お話しましょう] do |event, message|
+  docomo_talk(event: event, message: message, name: "Xp様", type: "10")
+end
+
+bot.command [:おっちゃん, :話しようぜ] do |event, message|
+  docomo_talk(event: event, message: message, name: "浪速のおっちゃん", type: "20")
+end
+
+bot.command [:赤さん, :はなししたいでちゅ, :おはなちちたいでちゅ] do |event, message|
+  docomo_talk(event: event, message: message, name: "赤さん", type: "30")
+end
+
+def talk(event, message)
   return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
 
   case rand(1..3)
