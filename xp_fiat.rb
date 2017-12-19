@@ -3,6 +3,8 @@
 require "discordrb"
 require "mechanize"
 require "json"
+require "net/http"
+require "uri"
 require "./command_patroller"
 require "dotenv/load"
 
@@ -179,6 +181,44 @@ def get_trend_message(response)
   link_url = content_data["linkUrl"]
   "【#{title}】\n#{link_url} "
 end
+
+# -----------------------------------------------------------------------------
+# 翻訳(google)
+
+bot.command :translate do |event, *sentences|
+  sentence = ""
+  sentences.each do |word|
+    sentence += word + " "
+  end
+  text = blue_mix_translate(event, sentence, model_id:"ja-en")
+  blue_mix_translate(event, text, model_id:"en-ja")
+end
+
+def blue_mix_translate(event, sentence, model_id:)
+
+  uri = URI.parse("https://gateway.watsonplatform.net/language-translator/api/v2/translate")
+  request = Net::HTTP::Post.new(uri)
+  request.basic_auth(ENV["BLUE_MIX_USER"], ENV["BLUE_MIX_PASS"])
+  request.content_type = "application/json"
+  request["Accept"] = "application/json"
+  request.body = JSON.dump({
+    "model_id": model_id,
+    "text": sentence
+  })
+
+  req_options = {
+    use_ssl: uri.scheme == "https",
+  }
+
+  response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+    http.request(request)
+  end
+
+  translated = JSON.parse(response.body)["translations"][0]["translation"]
+  event.send_message("#{translated} ")
+end
+
+
 
 # -----------------------------------------------------------------------------
 # CoinExchange.io
