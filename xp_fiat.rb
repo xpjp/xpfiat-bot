@@ -185,13 +185,20 @@ end
 # -----------------------------------------------------------------------------
 # 翻訳(google)
 
-bot.command :translate do |event, *sentences|
+def join_sentence(sentences)
   sentence = ""
   sentences.each do |word|
     sentence += word + " "
   end
-  text = blue_mix_translate(event, sentence, model_id:"ja-en")
-  blue_mix_translate(event, text, model_id:"en-ja")
+  sentence
+end
+
+bot.command :jp2en do |event, *sentences|
+  blue_mix_translate(event, join_sentence(sentences), model_id:"ja-en")
+end
+
+bot.command :en2jp do |event, *sentences|
+  blue_mix_translate(event, join_sentence(sentences), model_id:"en-ja")
 end
 
 def blue_mix_translate(event, sentence, model_id:)
