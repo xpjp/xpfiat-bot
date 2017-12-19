@@ -6,8 +6,15 @@ require "json"
 require "./command_patroller"
 require "dotenv/load"
 require "RMagick"
+require "rufus-scheduler"
 
 bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix: ["?", "？"]
+
+# 連続のコマンド実行を制限する設定。以下は10秒以内に1回に制限する例。TODO あとでコメント直すor消す
+general_rate_limiter = Discordrb::Commands::SimpleRateLimiter.new
+general_rate_limiter.bucket(:general, limit: 1, time_span: 10, delay: 0)
+bot.include_buckets(general_rate_limiter)
+rate_limit_message = "連続して?コマンドは使えないよ。ちょっと待ってね!"
 
 module JoinAnnouncer
   extend Discordrb::EventContainer
@@ -35,6 +42,7 @@ bot.command :help do |event|
       ?yk or ?諭吉 一万円で買えるXPの量
       ?doge or ?犬 1DOGEで買えるXPの量
       ?how_rain 降雨量の追加(直近100メッセージ)
+      ?talk_ai [message] AIと対話できます
     HEREDOC
 
     embed.description = help
@@ -80,10 +88,10 @@ def xp2jpy(event, param1)
   message =
     if (amount = param1.to_f).positive?
       _xp_jpy = xp_jpy * amount
-      "#{event.user.mention} #{amount.to_i}XPはいま #{_xp_jpy} 円だよ"
+      "#{event.user.mention} <:xpchan01:391497596461645824>＜ #{amount.to_i}XPはいま #{_xp_jpy} 円だよ〜"
     else
       _xp_jpy = format("%.8f", xp_jpy)
-      "#{event.user.mention} 1XPはいま #{_xp_jpy} 円だよ"
+      "#{event.user.mention} <:xpchan01:391497596461645824>＜ 1XPはいま #{_xp_jpy} 円だよ〜"
     end
   message ||= ":satisfied:"
   event.respond message
@@ -95,9 +103,9 @@ bot.command [:xp_jpy, :いくら] { |event, param1| xp2jpy(event, param1) }
 bot.command :どれだけ買える do |event, param1|
   if (yen = param1.to_f).positive?
     amount = yen / xp_jpy
-    event.respond "#{event.user.mention} #{yen.to_i}円で #{amount.to_i}XPくらい買えるよ"
+    event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ #{yen.to_i}円で #{amount.to_i}XPくらい買えるよ〜"
   else
-    event.respond "#{event.user.mention} 金額を正しく指定してね :satisfied:"
+    event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ 金額を正しく指定してね〜 :satisfied:"
   end
 end
 
@@ -131,7 +139,24 @@ end
 
 # -----------------------------------------------------------------------------
 # 雑談対話Bot
-bot.command :talk_ai do |event, message|
+
+bot.command [:talk_ai, :話そう？, :話そう?, :ta] do |event, message|
+  talk(event, message)
+end
+
+bot.command [:Xp様, :お話しましょう] do |event, message|
+  docomo_talk(event: event, message: message, name: "Xp様", type: "10")
+end
+
+bot.command [:おっちゃん, :話しようぜ] do |event, message|
+  docomo_talk(event: event, message: message, name: "浪速のおっちゃん", type: "20")
+end
+
+bot.command [:赤さん, :はなししたいでちゅ, :おはなちちたいでちゅ] do |event, message|
+  docomo_talk(event: event, message: message, name: "赤さん", type: "30")
+end
+
+def talk(event, message)
   return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
 
   case rand(1..3)
@@ -154,6 +179,31 @@ def docomo_talk(event:, message:, name:, type:)
   response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
   utt = JSON.parse(response.body)["utt"]
   event.send_message("#{name}「#{utt} 」")
+end
+
+# -----------------------------------------------------------------------------
+# trend返却(docomo)
+
+bot.command :trend do |event, keyword|
+  docomo_trend(event, keyword)
+end
+
+def docomo_trend(event, keyword)
+  api_key = ENV["DOCOMO_TALK_APIKEY"]
+  url = "https://api.apigw.smt.docomo.ne.jp/webCuration/v3/search?keyword=#{keyword}&APIKEY=#{api_key}"
+
+  response = Mechanize.new.get(url)
+  message = get_trend_message(response)
+  event.send_message(message)
+end
+
+def get_trend_message(response)
+  article_contents = JSON.parse(response.body)["articleContents"]
+  return "いい記事なかったよ。" if article_contents.empty?
+  content_data = article_contents[0]["contentData"]
+  title = content_data["title"]
+  link_url = content_data["linkUrl"]
+  "【#{title}】\n#{link_url} "
 end
 
 # -----------------------------------------------------------------------------
@@ -200,11 +250,11 @@ end
 def say_hero(name)
   case name
   when :ng
-    "野口「私の肖像画一枚で、#{how_much(1000)} XPが買える」"
+    "<:noguchi:391497580909035520>＜ 私の肖像画一枚で、#{how_much(1000)} XPが買える"
   when :hg
-    "樋口「私の肖像画一枚で、#{how_much(5000)} XPが買える」"
+    "<:higuchi:391497564291072000>＜ 私の肖像画一枚で、#{how_much(5000)} XPが買える"
   when :yk
-    "諭吉「私の肖像画一枚で、#{how_much(10_000)} XPが買える」"
+    "<:yukichi:391600432931274764>＜ 私の肖像画一枚で、#{how_much(10_000)} XPが買える"
   end
 end
 
@@ -219,13 +269,20 @@ bot.command [:諭吉, :yk] { |event| event.respond "#{event.user.mention} #{say_
 def doge(event)
   d = read_price(:xp_doge)
   amount = 1.0 / d
-  event.respond "#{event.user.mention} イッヌ「わい一匹で、#{amount.to_i} くらいXPが買えるワン」"
+  event.respond "#{event.user.mention} <:doge:391497526278225920>＜ わい一匹で、#{amount.to_i} くらいXPが買えるワン"
 end
 
-bot.command [:doge, :犬, :イッヌ] { |event| doge(event) }
+# 犬系コマンドをrate_limitする例。TODO 後でコメント消す
+bot.command [:doge, :犬, :イッヌ], {rate_limit_message: rate_limit_message, bucket: :general} { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
-bot.command [:今何人] { |event| event.respond "#{event.user.mention} ここのメンバーはいま #{event.server.member_count}人だよーん" }
+bot.command [:今何人] do |event|
+  event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ ここには今#{event.server.member_count}人いるよ〜"
+end
+
+# -----------------------------------------------------------------------------
+# ping-pong
+bot.command [:ping], channels: ["bot_control"] { |event| event.respond "pong" }
 
 bot.message(containing: "ボットよ！バランスを確認せよ！") { |event| event.respond ",balance" }
 
@@ -256,6 +313,12 @@ bot.command :make do |event, param1, param2|
   event.send_file(File.open(path, "r"))
   File.delete path
   nil
+end
+
+# update BOT status periodically
+scheduler = Rufus::Scheduler.new
+scheduler.in "5m" do
+  bot.update_status(:online, "だいたい#{format("%.3f", xp_jpy)}円だよ〜", nil)
 end
 
 bot.include! JoinAnnouncer
