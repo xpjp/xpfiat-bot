@@ -221,36 +221,27 @@ end
 def join_sentence(sentences)
   sentence = ""
   sentences.each do |word|
-    sentence += word + " "
+    sentence += "#{word.to_s} "
   end
   sentence
 end
 
-def call_blue_mix_translate(uri, body)
-  request = Net::HTTP::Post.new(uri)
-  request.basic_auth(ENV["BLUE_MIX_USER"], ENV["BLUE_MIX_PASS"])
-  request.content_type = "application/json"
-  request["Accept"] = "application/json"
-  request.body = body
-
-  req_options = {
-    use_ssl: uri.scheme == "https"
-  }
-
-  Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
-    http.request(request)
-  end
-end
-
 def blue_mix_translate(event, sentence, model:)
-  uri = URI.parse("https://gateway.watsonplatform.net/language-translator/api/v2/translate")
   body = {
     "model_id": model,
     "text": sentence
   }.to_json
-  response = call_blue_mix_translate(uri, body)
+  agent = Mechanize.new
+  agent.add_auth("https://gateway.watsonplatform.net/language-translator/api", ENV["BLUE_MIX_USER"], ENV["BLUE_MIX_PASS"])
+  agent.request_headers = {
+    "Accept" => "application/json"
+  }
+  additional_headers = {
+    "content-type" => "application/json"
+  }
+  response = agent.post("https://gateway.watsonplatform.net/language-translator/api/v2/translate", body, additional_headers)
   translated = JSON.parse(response.body)["translations"][0]["translation"]
-  event.send_message("#{translated} ")
+  event.send_message(translated)
 end
 
 # -----------------------------------------------------------------------------
