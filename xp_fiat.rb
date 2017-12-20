@@ -181,7 +181,7 @@ def talk(event, message)
     name_en = "catty"
   end
 
-  if rand(0..1) > 0
+  if rand(0..1).positive?
     message = blue_mix_translate(message, model: "ja-en")
     name = name_en
   end
