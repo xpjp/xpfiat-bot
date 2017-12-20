@@ -163,30 +163,32 @@ end
 def talk(event, message)
   return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
 # TODO: そのうちまとめます。 Ryo
+  message = ""
+  name = ""
+  name_en = ""
   case rand(1..6)
   when 1
     message = docomo_talk(message: message, type: "10")
-    event.send_message("Xp様「#{message} 」")
+    name = "Xp様"
+    name_en = "Ms.Xp"
   when 2
     message = docomo_talk(message: message, type: "20")
-    event.send_message("浪速のおっちゃん「#{message} 」")
+    name = "浪速のおっちゃん"
+    name_en = "James"
   when 3
     message = docomo_talk(message: message, type: "30")
-    event.send_message("赤さん「#{message} 」")
-  when 4
-    message = docomo_talk(message: message, type: "10")
-    translated = blue_mix_translate(message, model: "ja-en")
-    event.send_message("Ms.Xp「#{translated} 」")
-  when 5
-    message = docomo_talk(message: message, type: "20")
-    translated = blue_mix_translate(message, model: "ja-en")
-    event.send_message("James「#{translated} 」")
-  when 6
-    message = docomo_talk(message: message, type: "30")
-    translated = blue_mix_translate(message, model: "ja-en")
-    event.send_message("catty「#{translated} 」")
+    name = "赤さん"
+    name_en = "catty"
   end
+
+  if rand(0..1) > 0
+    message = blue_mix_translate(message, model: "ja-en")
+  end
+
+  event.send_message("#{name}「#{message} 」")
 end
+
+
 
 def docomo_talk(message:, type:)
   body = {
