@@ -165,15 +165,18 @@ def talk(event, message)
 
   case rand(1..3)
   when 1
-    docomo_talk(event: event, message: message, name: "Xp様", type: "10")
+    docomo_talk(event: event, message: message, type: "10")
+    event.send_message("Xp様「#{utt} 」")
   when 2
-    docomo_talk(event: event, message: message, name: "浪速のおっちゃん", type: "20")
+    docomo_talk(event: event, message: message, type: "20")
+    event.send_message("浪速のおっちゃん「#{utt} 」")
   when 3
-    docomo_talk(event: event, message: message, name: "赤さん", type: "30")
+    docomo_talk(event: event, message: message, type: "30")
+    event.send_message("赤さん「#{utt} 」")
   end
 end
 
-def docomo_talk(event:, message:, name:, type:)
+def docomo_talk(event:, message:, type:)
   body = {
     utt: message,
     mode: "dialog",
@@ -182,7 +185,6 @@ def docomo_talk(event:, message:, name:, type:)
   api_key = ENV["DOCOMO_TALK_APIKEY"]
   response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
   utt = JSON.parse(response.body)["utt"]
-  event.send_message("#{name}「#{utt} 」")
 end
 
 # -----------------------------------------------------------------------------
