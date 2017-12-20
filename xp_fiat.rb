@@ -29,7 +29,7 @@ end
 # TODO:新しいコマンド追加した場合は下記ヘルプに追加して下さい。
 bot.command :help do |event|
   event.channel.send_embed do |embed|
-    help = <<-HEREDOC
+    help = <<~HEREDOC
       Commands:
       ?xp_jpy 1XPの日本円換算
       ?xp_jpy [amount] amount分のXPの日本円換算
@@ -135,6 +135,9 @@ bot.message(containing: "はよ！") do |event|
     event.respond "#{event.user.mention} __***SOON!***__"
   end
 end
+
+# -----------------------------------------------------------------------------
+bot.message(containing: "わよ！") { |event| event.respond "#{event.user.mention} __***もちろんですわ***__" }
 
 # -----------------------------------------------------------------------------
 # 雑談対話Bot
