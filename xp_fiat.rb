@@ -221,7 +221,7 @@ end
 def join_sentence(sentences)
   sentence = ""
   sentences.each do |word|
-    sentence += "#{word.to_s} "
+    sentence += "#{word} "
   end
   sentence
 end
@@ -239,6 +239,7 @@ def blue_mix_translate(event, sentence, model:)
   additional_headers = {
     "content-type" => "application/json"
   }
+  # TODO:エラー対応
   response = agent.post("https://gateway.watsonplatform.net/language-translator/api/v2/translate", body, additional_headers)
   translated = JSON.parse(response.body)["translations"][0]["translation"]
   event.send_message(translated)
