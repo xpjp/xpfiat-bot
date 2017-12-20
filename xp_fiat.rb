@@ -31,7 +31,7 @@ end
 # TODO:新しいコマンド追加した場合は下記ヘルプに追加して下さい。
 bot.command :help do |event|
   event.channel.send_embed do |embed|
-    help = <<-HEREDOC
+    help = <<~HEREDOC
       Commands:
       ?xp_jpy 1XPの日本円換算
       ?xp_jpy [amount] amount分のXPの日本円換算
@@ -137,6 +137,9 @@ bot.message(containing: "はよ！") do |event|
     event.respond "#{event.user.mention} __***SOON!***__"
   end
 end
+
+# -----------------------------------------------------------------------------
+bot.message(containing: "わよ！") { |event| event.respond "#{event.user.mention} __***もちろんですわ***__" }
 
 # -----------------------------------------------------------------------------
 # 雑談対話Bot
@@ -325,7 +328,7 @@ bot.command [:ping], channels: ["bot_control"] { |event| event.respond "pong" }
 
 bot.message(containing: "ボットよ！バランスを確認せよ！") { |event| event.respond ",balance" }
 
-bot.message(containing: ",register") do |event|
+bot.message(start_with: ",register") do |event|
   bs = event.server.text_channels.select { |c| c.name == "bot_spam2" }.first
   event.respond "#{event.user.mention} ウォレットは登録されました。 #{bs.mention} で`,balance`をして確認してください。"
 end
@@ -333,7 +336,7 @@ end
 # -----------------------------------------------------------------------------
 # update BOT status periodically
 scheduler = Rufus::Scheduler.new
-scheduler.in "5m" do
+scheduler.every "5m" do
   bot.update_status(:online, "だいたい#{format("%.3f", xp_jpy)}円だよ〜", nil)
 end
 
