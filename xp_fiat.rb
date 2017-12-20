@@ -162,17 +162,29 @@ end
 
 def talk(event, message)
   return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
-
-  case rand(1..3)
+# TODO: そのうちまとめます。 Ryo
+  case rand(1..6)
   when 1
-    message = docomo_talk(event: event, message: message, type: "10")
+    message = docomo_talk(message: message, type: "10")
     event.send_message("Xp様「#{message} 」")
   when 2
-    message = docomo_talk(event: event, message: message, type: "20")
+    message = docomo_talk(message: message, type: "20")
     event.send_message("浪速のおっちゃん「#{message} 」")
   when 3
-    message = docomo_talk(event: event, message: message, type: "30")
+    message = docomo_talk(message: message, type: "30")
     event.send_message("赤さん「#{message} 」")
+  when 4
+    message = docomo_talk(message: message, type: "10")
+    translated = blue_mix_translate(message, model: "ja-en")
+    event.send_message("Ms.Xp「#{translated} 」")
+  when 5
+    message = docomo_talk(message: message, type: "20")
+    translated = blue_mix_translate(message, model: "ja-en")
+    event.send_message("James「#{translated} 」")
+  when 6
+    message = docomo_talk(message: message, type: "30")
+    translated = blue_mix_translate(message, model: "ja-en")
+    event.send_message("catty「#{translated} 」")
   end
 end
 
@@ -216,12 +228,12 @@ end
 # 翻訳(IBM)
 
 bot.command :jp2en do |event, *sentences|
-  translated = blue_mix_translate(event, join_sentence(sentences), model: "ja-en")
+  translated = blue_mix_translate(join_sentence(sentences), model: "ja-en")
   event.send_message(translated)
 end
 
 bot.command :en2jp do |event, *sentences|
-  translated = blue_mix_translate(event, join_sentence(sentences), model: "en-ja")
+  translated = blue_mix_translate(join_sentence(sentences), model: "en-ja")
   event.send_message(translated)
 end
 
@@ -233,7 +245,7 @@ def join_sentence(sentences)
   sentence
 end
 
-def blue_mix_translate(event, sentence, model:)
+def blue_mix_translate(sentence, model:)
   body = {
     "model_id": model,
     "text": sentence
