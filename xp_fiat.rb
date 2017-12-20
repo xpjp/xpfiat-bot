@@ -211,7 +211,7 @@ def get_trend_message(response)
 end
 
 # -----------------------------------------------------------------------------
-# 翻訳(google)
+# 翻訳(IBM)
 
 bot.command :jp2en do |event, *sentences|
   blue_mix_translate(event, join_sentence(sentences), model: "ja-en")
@@ -235,15 +235,17 @@ def blue_mix_translate(event, sentence, model:)
     "text": sentence
   }.to_json
   agent = Mechanize.new
-  agent.add_auth("https://gateway.watsonplatform.net/language-translator/api", ENV["BLUE_MIX_USER"], ENV["BLUE_MIX_PASS"])
+  uri = "https://gateway.watsonplatform.net/language-translator/api"
+  agent.add_auth(uri, ENV["BLUE_MIX_USER"], ENV["BLUE_MIX_PASS"])
   agent.request_headers = {
     "Accept" => "application/json"
   }
   additional_headers = {
     "content-type" => "application/json"
   }
-  # TODO:エラー対応
-  response = agent.post("https://gateway.watsonplatform.net/language-translator/api/v2/translate", body, additional_headers)
+# TODO:エラー対応
+  uri_translate = "#{uri}/v2/translate"
+  response = agent.post(uri_translate, body, additional_headers)
   translated = JSON.parse(response.body)["translations"][0]["translation"]
   event.send_message(translated)
 end
