@@ -214,11 +214,13 @@ end
 # 翻訳(IBM)
 
 bot.command :jp2en do |event, *sentences|
-  blue_mix_translate(event, join_sentence(sentences), model: "ja-en")
+  translated = blue_mix_translate(event, join_sentence(sentences), model: "ja-en")
+  event.send_message(translated)
 end
 
 bot.command :en2jp do |event, *sentences|
-  blue_mix_translate(event, join_sentence(sentences), model: "en-ja")
+  translated = blue_mix_translate(event, join_sentence(sentences), model: "en-ja")
+  event.send_message(translated)
 end
 
 def join_sentence(sentences)
@@ -246,8 +248,7 @@ def blue_mix_translate(event, sentence, model:)
 # TODO:エラー対応
   uri_translate = "#{uri}/v2/translate"
   response = agent.post(uri_translate, body, additional_headers)
-  translated = JSON.parse(response.body)["translations"][0]["translation"]
-  event.send_message(translated)
+  JSON.parse(response.body)["translations"][0]["translation"]
 end
 
 # -----------------------------------------------------------------------------
