@@ -162,11 +162,11 @@ end
 
 def talk(event, message)
   return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
-# TODO: そのうちまとめます。 Ryo
+  # TODO: そのうちまとめます。 Ryo
   message = ""
   name = ""
   name_en = ""
-  case rand(1..6)
+  case rand(1..3)
   when 1
     message = docomo_talk(message: message, type: "10")
     name = "Xp様"
@@ -180,7 +180,10 @@ def talk(event, message)
     name = "赤さん"
     name_en = "catty"
   end
+  talk2(message: message, name: name, name_en: name_en)
+end
 
+def talk2(message:, name:, name_en:)
   if rand(0..1).positive?
     message = blue_mix_translate(message, model: "ja-en")
     name = name_en
@@ -188,8 +191,6 @@ def talk(event, message)
 
   event.send_message("#{name}「#{message} 」")
 end
-
-
 
 def docomo_talk(message:, type:)
   body = {
@@ -262,7 +263,7 @@ def blue_mix_translate(sentence, model:)
   additional_headers = {
     "content-type" => "application/json"
   }
-# TODO:エラー対応
+  # TODO:エラー対応
   uri_translate = "#{uri}/v2/translate"
   response = agent.post(uri_translate, body, additional_headers)
   JSON.parse(response.body)["translations"][0]["translation"]
