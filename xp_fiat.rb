@@ -3,6 +3,8 @@
 require "discordrb"
 require "mechanize"
 require "json"
+require "net/http"
+require "uri"
 require "./command_patroller"
 require "dotenv/load"
 require "rufus-scheduler"
@@ -206,6 +208,46 @@ def get_trend_message(response)
   title = content_data["title"]
   link_url = content_data["linkUrl"]
   "【#{title}】\n#{link_url} "
+end
+
+# -----------------------------------------------------------------------------
+# 翻訳(IBM)
+
+bot.command :jp2en do |event, *sentences|
+  blue_mix_translate(event, join_sentence(sentences), model: "ja-en")
+end
+
+bot.command :en2jp do |event, *sentences|
+  blue_mix_translate(event, join_sentence(sentences), model: "en-ja")
+end
+
+def join_sentence(sentences)
+  sentence = ""
+  sentences.each do |word|
+    sentence += "#{word} "
+  end
+  sentence
+end
+
+def blue_mix_translate(event, sentence, model:)
+  body = {
+    "model_id": model,
+    "text": sentence
+  }.to_json
+  agent = Mechanize.new
+  uri = "https://gateway.watsonplatform.net/language-translator/api"
+  agent.add_auth(uri, ENV["BLUE_MIX_USER"], ENV["BLUE_MIX_PASS"])
+  agent.request_headers = {
+    "Accept" => "application/json"
+  }
+  additional_headers = {
+    "content-type" => "application/json"
+  }
+# TODO:エラー対応
+  uri_translate = "#{uri}/v2/translate"
+  response = agent.post(uri_translate, body, additional_headers)
+  translated = JSON.parse(response.body)["translations"][0]["translation"]
+  event.send_message(translated)
 end
 
 # -----------------------------------------------------------------------------
