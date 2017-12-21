@@ -290,7 +290,7 @@ bot.message(containing: "ボットよ！バランスを確認せよ！") { |even
 
 bot.message(start_with: ",register") do |event|
   bs = event.server.text_channels.select { |c| c.name == "bot_spam2" }.first
-  event.respond "#{event.user.mention} ウォレットは登録されました。利用できるよう準備を行っております。しばらく時間を置いてから #{bs.mention} で`,balanceを`して確認してください。"
+  event.respond "#{event.user.mention} ウォレットは登録されました。利用できるよう準備を行っております。しばらく時間を置いてから <#390058691845554177> で`,balanceを`して確認してください。"
 end
 
 # -----------------------------------------------------------------------------
