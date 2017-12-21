@@ -299,7 +299,7 @@ end
 # update BOT status periodically
 scheduler = Rufus::Scheduler.new
 scheduler.every "5m" do
-  bot.update_status(:online, "だいたい#{format("%.3f", xp_jpy.to_s(:delimited))}円だよ〜", nil)
+  bot.update_status(:online, "だいたい#{format('%.3f', xp_jpy.to_s(:delimited))}円だよ〜", nil)
 end
 
 bot.include! JoinAnnouncer
