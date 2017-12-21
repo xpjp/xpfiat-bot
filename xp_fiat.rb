@@ -289,7 +289,6 @@ bot.command [:ping], channels: ["bot_control"] { |event| event.respond "pong" }
 bot.message(containing: "ボットよ！バランスを確認せよ！") { |event| event.respond ",balance" }
 
 bot.message(start_with: ",register") do |event|
-  bs = event.server.text_channels.select { |c| c.name == "bot_spam2" }.first
   event.respond "#{event.user.mention} ウォレットは登録されました。利用できるよう準備を行っております。しばらく時間を置いてから <#390058691845554177> で`,balanceを`して確認してください。"
 end
 
