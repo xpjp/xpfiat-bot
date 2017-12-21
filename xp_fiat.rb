@@ -6,6 +6,7 @@ require "json"
 require "./command_patroller"
 require "dotenv/load"
 require "rufus-scheduler"
+require "negapoji"
 
 bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix: ["?", "？"]
 
@@ -275,7 +276,7 @@ def doge(event)
 end
 
 # 犬系コマンドをrate_limitする例。TODO 後でコメント消す
-bot.command [:doge, :犬, :イッヌ], {rate_limit_message: rate_limit_message, bucket: :general} { |event| doge(event) }
+#bot.command [:doge, :犬, :イッヌ], rate_limit_message: rate_limit_message, bucket: :general { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
 bot.command [:今何人] do |event|
@@ -289,15 +290,61 @@ bot.command [:ping], channels: ["bot_control"] { |event| event.respond "pong" }
 bot.message(containing: "ボットよ！バランスを確認せよ！") { |event| event.respond ",balance" }
 
 bot.message(start_with: ",register") do |event|
-  bs = event.server.text_channels.select { |c| c.name == "bot_spam2" }.first
-  event.respond "#{event.user.mention} ウォレットは登録されました。 #{bs.mention} で`,balance`をして確認してください。"
+  event.respond "#{event.user.mention} ウォレットは登録されました。利用できるよう準備を行っております。"
+  + "しばらく時間を置いてから <#390058691845554177> で`,balanceを`して確認してください。"
 end
 
 # -----------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------
+# xp-chan emotion
+bot.command :talk_ai_plus do |event, message|
+  talk_plus(event, message)
+end
+
+def talk_plus(event, message)
+  return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
+
+  case rand(1..3)
+  when 1
+    docomo_talk_plus(event: event, message: message, name: "Xp様", type: "10")
+  when 2
+    docomo_talk_plus(event: event, message: message, name: "浪速のおっちゃん", type: "20")
+  when 3
+    docomo_talk_plus(event: event, message: message, name: "赤さん", type: "30")
+  end
+end
+
+def docomo_talk_plus(event:, message:, name:, type:)
+  body = {
+    utt: message,
+    mode: "dialog",
+    t: type
+  }.to_json
+  api_key = ENV["DOCOMO_TALK_APIKEY"]
+  response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
+  utt = JSON.parse(response.body)["utt"]
+  emotion = Negapoji.judge(utt) if utt.is_a?(String)
+  # embed_setting
+  event.channel.send_embed do |embed|
+    # embed_setting
+    embed.title = "#{name}"
+    embed.description = "#{event.user.mention}\n「#{utt}」"
+    #embed.color = 0x2bfc19
+    if emotion == "positive"
+      embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM_pppuatX_vvXw6ZDRQ_3GouyV9C0rrf8qMl1SlkYoDie6Y5l")
+    else
+      embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: "https://media.istockphoto.com/vectors/large-sad-crying-yellow-emoticon-cartoon-vector-id468900488")
+    end
+  end
+end
+
+#-------------------------------------------------------------------------------
+
 # update BOT status periodically
 scheduler = Rufus::Scheduler.new
 scheduler.every "5m" do
-  bot.update_status(:online, "だいたい#{format("%.3f", xp_jpy)}円だよ〜", nil)
+  bot.update_status(:online, "だいたい#{format('%.3f', xp_jpy)}円だよ〜", nil)
 end
 
 bot.include! JoinAnnouncer

@@ -5,6 +5,8 @@ gem "dotenv"
 gem "json"
 gem "mechanize"
 gem "rufus-scheduler"
+gem "natto"
+gem "negapoji"
 
 group :development, :test do
   gem "rspec"
