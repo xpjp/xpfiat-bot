@@ -275,7 +275,7 @@ def doge(event)
 end
 
 # 犬系コマンドをrate_limitする例。TODO 後でコメント消す
-bot.command [:doge, :犬, :イッヌ], {rate_limit_message: rate_limit_message, bucket: :general} { |event| doge(event) }
+bot.command [:doge, :犬, :イッヌ], rate_limit_message: rate_limit_message, bucket: :general { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
 bot.command [:今何人] do |event|
@@ -289,14 +289,15 @@ bot.command [:ping], channels: ["bot_control"] { |event| event.respond "pong" }
 bot.message(containing: "ボットよ！バランスを確認せよ！") { |event| event.respond ",balance" }
 
 bot.message(start_with: ",register") do |event|
-  event.respond "#{event.user.mention} ウォレットは登録されました。利用できるよう準備を行っております。しばらく時間を置いてから <#390058691845554177> で`,balanceを`して確認してください。"
+  event.respond "#{event.user.mention} ウォレットは登録されました。利用できるよう準備を行っております。"
+  + "しばらく時間を置いてから <#390058691845554177> で`,balanceを`して確認してください。"
 end
 
 # -----------------------------------------------------------------------------
 # update BOT status periodically
 scheduler = Rufus::Scheduler.new
 scheduler.every "5m" do
-  bot.update_status(:online, "だいたい#{format("%.3f", xp_jpy)}円だよ〜", nil)
+  bot.update_status(:online, "だいたい#{format('%.3f', xp_jpy)}円だよ〜", nil)
 end
 
 bot.include! JoinAnnouncer
