@@ -273,7 +273,7 @@ def doge(event)
 end
 
 # 犬系コマンドをrate_limitする例。TODO 後でコメント消す
-bot.command [:doge, :犬, :イッヌ], {rate_limit_message: rate_limit_message, bucket: :general} { |event| doge(event) }
+bot.command [:doge, :犬, :イッヌ], rate_limit_message: rate_limit_message, bucket: :general { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
 bot.command [:今何人] do |event|
@@ -295,11 +295,11 @@ end
 bot.command :make_img do |event, sentence1, sentence2|
   path = "./tmp/XPchan_#{event.user.name}_#{Time.now.to_i}.png"
 
-  if (sentence1.nil?)
-    res_message = "（何かを言いたがっているようだ…）"
-  else
-    res_message = "【XPちゃん】\n  #{sentence1}\n  #{sentence2}"
-  end
+  res_message = if sentence1.nil?
+                  "（何かを言いたがっているようだ…）"
+                else
+                  "【XPちゃん】\n  #{sentence1}\n  #{sentence2}"
+                end
 
   img = Magick::ImageList.new("./img/original.png")
 
@@ -321,7 +321,7 @@ end
 # update BOT status periodically
 scheduler = Rufus::Scheduler.new
 scheduler.in "5m" do
-  bot.update_status(:online, "だいたい#{format("%.3f", xp_jpy)}円だよ〜", nil)
+  bot.update_status(:online, "だいたい#{format('%.3f', xp_jpy)}円だよ〜", nil)
 end
 
 bot.include! JoinAnnouncer
