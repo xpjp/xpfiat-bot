@@ -6,6 +6,8 @@ require "json"
 require "./command_patroller"
 require "dotenv/load"
 require "rufus-scheduler"
+require "active_support"
+require "active_support/core_ext/numeric/conversions"
 
 bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix: ["?", "？"]
 
@@ -87,10 +89,11 @@ def xp2jpy(event, param1)
   message =
     if (amount = param1.to_f).positive?
       _xp_jpy = xp_jpy * amount
-      "#{event.user.mention} <:xpchan01:391497596461645824>＜ #{amount.to_i}XPはいま #{_xp_jpy} 円だよ〜"
+      "#{event.user.mention} <:xpchan01:391497596461645824>
+      ＜ #{amount.to_i.to_s(:delimited)}XPはいま #{_xp_jpy.to_s(:delimited)} 円だよ〜"
     else
-      _xp_jpy = format("%.8f", xp_jpy)
-      "#{event.user.mention} <:xpchan01:391497596461645824>＜ 1XPはいま #{_xp_jpy} 円だよ〜"
+      _xp_jpy = xp_jpy.round(8)
+      "#{event.user.mention} <:xpchan01:391497596461645824>＜ 1XPはいま #{_xp_jpy.to_s(:delimited)} 円だよ〜"
     end
   message ||= ":satisfied:"
   event.respond message
@@ -102,7 +105,8 @@ bot.command [:xp_jpy, :いくら] { |event, param1| xp2jpy(event, param1) }
 bot.command :どれだけ買える do |event, param1|
   if (yen = param1.to_f).positive?
     amount = yen / xp_jpy
-    event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ #{yen.to_i}円で #{amount.to_i}XPくらい買えるよ〜"
+    event.respond "#{event.user.mention} <:xpchan01:391497596461645824>
+    ＜ #{yen.to_i.to_s(:delimited)}円で #{amount.to_i.to_s(:delimited)}XPくらい買えるよ〜"
   else
     event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ 金額を正しく指定してね〜 :satisfied:"
   end
@@ -124,7 +128,7 @@ def how_rain(event, max_history)
       sum += amount
     end
   end
-  event.send_message("只今の降雨量は #{sum} Xpです。")
+  event.send_message("只今の降雨量は #{sum.to_s(:delimited)} Xpです。")
 end
 
 # -----------------------------------------------------------------------------
@@ -252,11 +256,11 @@ end
 def say_hero(name)
   case name
   when :ng
-    "<:noguchi:391497580909035520>＜ 私の肖像画一枚で、#{how_much(1000)} XPが買える"
+    "<:noguchi:391497580909035520>＜ 私の肖像画一枚で、#{how_much(1000).to_s(:delimited)} XPが買える"
   when :hg
-    "<:higuchi:391497564291072000>＜ 私の肖像画一枚で、#{how_much(5000)} XPが買える"
+    "<:higuchi:391497564291072000>＜ 私の肖像画一枚で、#{how_much(5000).to_s(:delimited)} XPが買える"
   when :yk
-    "<:yukichi:391600432931274764>＜ 私の肖像画一枚で、#{how_much(10_000)} XPが買える"
+    "<:yukichi:391600432931274764>＜ 私の肖像画一枚で、#{how_much(10_000).to_s(:delimited)} XPが買える"
   end
 end
 
@@ -271,11 +275,11 @@ bot.command [:諭吉, :yk] { |event| event.respond "#{event.user.mention} #{say_
 def doge(event)
   d = read_price(:xp_doge)
   amount = 1.0 / d
-  event.respond "#{event.user.mention} <:doge:391497526278225920>＜ わい一匹で、#{amount.to_i} くらいXPが買えるワン"
+  event.respond "#{event.user.mention} <:doge:391497526278225920>＜ わい一匹で、#{amount.to_i.to_s(:delimited)} くらいXPが買えるワン"
 end
 
 # 犬系コマンドをrate_limitする例。TODO 後でコメント消す
-bot.command [:doge, :犬, :イッヌ], rate_limit_message: rate_limit_message, bucket: :general { |event| doge(event) }
+bot.command [:doge, :犬, :イッヌ], {rate_limit_message: rate_limit_message, bucket: :general} { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
 bot.command [:今何人] do |event|
@@ -297,7 +301,7 @@ end
 # update BOT status periodically
 scheduler = Rufus::Scheduler.new
 scheduler.every "5m" do
-  bot.update_status(:online, "だいたい#{format('%.3f', xp_jpy)}円だよ〜", nil)
+  bot.update_status(:online, "だいたい#{format('%.3f', xp_jpy.to_s(:delimited))}円だよ〜", nil)
 end
 
 bot.include! JoinAnnouncer

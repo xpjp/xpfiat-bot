@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+gem "activesupport"
 gem "discordrb"
 gem "dotenv"
 gem "json"
