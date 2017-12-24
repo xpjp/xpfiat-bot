@@ -19,7 +19,6 @@ bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["C
 general_rate_limiter = Discordrb::Commands::SimpleRateLimiter.new
 general_rate_limiter.bucket(:general, limit: 1, time_span: 10, delay: 0)
 bot.include_buckets(general_rate_limiter)
-rate_limit_message = "連続して?コマンドは使えないよ。ちょっと待ってね!"
 
 module JoinAnnouncer
   extend Discordrb::EventContainer
