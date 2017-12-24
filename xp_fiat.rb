@@ -5,6 +5,7 @@ require "mechanize"
 require "json"
 require "./command_patroller"
 require "dotenv/load"
+require "RMagick"
 require "rufus-scheduler"
 require "active_support"
 require "active_support/core_ext/numeric/conversions"
@@ -298,6 +299,32 @@ bot.message(start_with: ",register") do |event|
 end
 
 # -----------------------------------------------------------------------------
+bot.command :make_img do |event, sentence1, sentence2|
+  path = "./tmp/XPchan_#{event.user.name}_#{Time.now.to_i}.png"
+
+  res_message = if sentence1.nil?
+                  "（何かを言いたがっているようだ…）"
+                else
+                  "【XPちゃん】\n  #{sentence1}\n  #{sentence2}"
+                end
+
+  img = Magick::ImageList.new("./img/original.png")
+
+  Magick::Draw.new.annotate(img, 0, 0, 300, 500, res_message) do
+    self.font = "fonts/rounded-mplus-2c-bold.ttf"
+    self.fill = "white"
+    self.stroke = "black"
+    self.stroke_width = 1
+    self.pointsize = 36
+    self.gravity = Magick::NorthWestGravity
+  end
+
+  img.write path
+  event.send_file(File.open(path, "r"))
+  File.delete path
+  nil
+end
+
 # update BOT status periodically
 scheduler = Rufus::Scheduler.new
 scheduler.every "5m" do
