@@ -89,7 +89,7 @@ def xp2jpy(event, param1)
   message =
     if (amount = param1.to_f).positive?
       _xp_jpy = xp_jpy * amount
-      "#{event.user.mention} <:xpchan01:391497596461645824>
+      "#{event.user.mention} <:xpchan01:391497596461645824>\
       ＜ #{amount.to_i.to_s(:delimited)}XPはいま #{_xp_jpy.to_s(:delimited)} 円だよ〜"
     else
       _xp_jpy = xp_jpy.round(8)
@@ -279,7 +279,7 @@ def doge(event)
 end
 
 # 犬系コマンドをrate_limitする例。TODO 後でコメント消す
-bot.command [:doge, :犬, :イッヌ], {rate_limit_message: rate_limit_message, bucket: :general} { |event| doge(event) }
+bot.command [:doge, :犬, :イッヌ], rate_limit_message: rate_limit_message, bucket: :general { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
 bot.command [:今何人] do |event|
