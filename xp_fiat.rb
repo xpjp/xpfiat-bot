@@ -92,8 +92,8 @@ def xp2jpy(event, param1)
   message =
     if (amount = param1.to_f).positive?
       _xp_jpy = xp_jpy * amount
-      "#{event.user.mention} <:xpchan01:391497596461645824>
-      ＜ #{amount.to_i.to_s(:delimited)}XPはいま #{_xp_jpy.to_s(:delimited)} 円だよ〜"
+      "#{event.user.mention} <:xpchan01:391497596461645824>\
+＜ #{amount.to_i.to_s(:delimited)}XPはいま #{_xp_jpy.to_s(:delimited)} 円だよ〜"
     else
       _xp_jpy = xp_jpy.round(8)
       "#{event.user.mention} <:xpchan01:391497596461645824>＜ 1XPはいま #{_xp_jpy.to_s(:delimited)} 円だよ〜"
@@ -108,8 +108,8 @@ bot.command [:xp_jpy, :いくら] { |event, param1| xp2jpy(event, param1) }
 bot.command :どれだけ買える do |event, param1|
   if (yen = param1.to_f).positive?
     amount = yen / xp_jpy
-    event.respond "#{event.user.mention} <:xpchan01:391497596461645824>
-    ＜ #{yen.to_i.to_s(:delimited)}円で #{amount.to_i.to_s(:delimited)}XPくらい買えるよ〜"
+    event.respond "#{event.user.mention} <:xpchan01:391497596461645824>\
+＜ #{yen.to_i.to_s(:delimited)}円で #{amount.to_i.to_s(:delimited)}XPくらい買えるよ〜"
   else
     event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ 金額を正しく指定してね〜 :satisfied:"
   end
@@ -341,7 +341,7 @@ def doge(event)
 end
 
 # 犬系コマンドをrate_limitする例。TODO 後でコメント消す
-bot.command [:doge, :犬, :イッヌ], {rate_limit_message: rate_limit_message, bucket: :general} { |event| doge(event) }
+bot.command [:doge, :犬, :イッヌ], rate_limit_message: rate_limit_message, bucket: :general { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
 bot.command [:今何人] do |event|
