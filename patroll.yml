@@ -3,7 +3,7 @@
 ########################################################################
 
 # 注意文言
-warning_text: "ここでのbalanceはやめてくださいねー"
+warning_text: "balanceはここではなく <#390058691845554177> でしてください。\nご協力ありがとうございます。"
 # 監視対象のコマンド一覧
 # Prefixが変更になったときに変更の必要があるのでそのとき考える
 target_commands:
@@ -17,3 +17,4 @@ allowed_channels:
 #  - "register-room"
   - "bot-spam"
   - "bot-spam2"
+  - "bot_control"
