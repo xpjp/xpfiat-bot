@@ -323,7 +323,7 @@ def doge(event)
 end
 
 # 犬系コマンドをrate_limitする例。TODO 後でコメント消す
-#bot.command [:doge, :犬, :イッヌ], rate_limit_message: rate_limit_message, bucket: :general { |event| doge(event) }
+# bot.command [:doge, :犬, :イッヌ], rate_limit_message: rate_limit_message, bucket: :general { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
 bot.command [:今何人] do |event|
@@ -400,12 +400,14 @@ def docomo_talk_plus(event:, message:, name:, type:)
   # embed_setting
   event.channel.send_embed do |embed|
     # embed_setting
-    embed.title = "#{name}"
+    embed.title = "#{name}to_s"
     embed.description = "#{event.user.mention}\n「#{utt}」"
     if emotion == "positive"
-      embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM_pppuatX_vvXw6ZDRQ_3GouyV9C0rrf8qMl1SlkYoDie6Y5l")
+      embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: \
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM_pppuatX_vvXw6ZDRQ_3GouyV9C0rrf8qMl1SlkYoDie6Y5l")
     else
-      embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: "https://media.istockphoto.com/vectors/large-sad-crying-yellow-emoticon-cartoon-vector-id468900488")
+      embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: \
+        "https://media.istockphoto.com/vectors/large-sad-crying-yellow-emoticon-cartoon-vector-id468900488")
     end
   end
 end
