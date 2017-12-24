@@ -7,6 +7,10 @@ gem "json"
 gem "mechanize"
 gem "rmagick"
 gem "rufus-scheduler"
+gem "natto"
+gem "negapoji" ,:git => 'git://github.com/hatt0519/negapoji.git'
+
+
 
 group :development, :test do
   gem "rspec"
