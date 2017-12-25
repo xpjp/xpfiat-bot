@@ -7,7 +7,7 @@ require "net/http"
 require "uri"
 require "./command_patroller"
 require "dotenv/load"
-require "rmagick"
+require "RMagick"
 require "rufus-scheduler"
 require "active_support"
 require "active_support/core_ext/numeric/conversions"
@@ -19,6 +19,7 @@ bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["C
 general_rate_limiter = Discordrb::Commands::SimpleRateLimiter.new
 general_rate_limiter.bucket(:general, limit: 1, time_span: 10, delay: 0)
 bot.include_buckets(general_rate_limiter)
+rate_limit_message = "連続して?コマンドは使えないよ。ちょっと待ってね!"
 
 module JoinAnnouncer
   extend Discordrb::EventContainer
@@ -236,7 +237,7 @@ def join_sentence(sentences)
   sentence
 end
 
-def blue_mix_translate(sentence, model:)
+def blue_mix_translate(event, sentence, model:)
   body = {
     "model_id": model,
     "text": sentence
@@ -250,7 +251,7 @@ def blue_mix_translate(sentence, model:)
   additional_headers = {
     "content-type" => "application/json"
   }
-# TODO: エラー対応
+# TODO:エラー対応
   uri_translate = "#{uri}/v2/translate"
   response = agent.post(uri_translate, body, additional_headers)
   JSON.parse(response.body)["translations"][0]["translation"]
@@ -323,7 +324,7 @@ def doge(event)
 end
 
 # 犬系コマンドをrate_limitする例。TODO 後でコメント消す
-# bot.command [:doge, :犬, :イッヌ], rate_limit_message: rate_limit_message, bucket: :general { |event| doge(event) }
+bot.command [:doge, :犬, :イッヌ], rate_limit_message: rate_limit_message, bucket: :general { |event| doge(event) }
 
 # -----------------------------------------------------------------------------
 bot.command [:今何人] do |event|
