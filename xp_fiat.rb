@@ -236,7 +236,7 @@ def join_sentence(sentences)
   sentence
 end
 
-def blue_mix_translate(event, sentence, model:)
+def blue_mix_translate(sentence, model:)
   body = {
     "model_id": model,
     "text": sentence
@@ -250,7 +250,7 @@ def blue_mix_translate(event, sentence, model:)
   additional_headers = {
     "content-type" => "application/json"
   }
-# TODO:エラー対応
+# TODO: エラー対応
   uri_translate = "#{uri}/v2/translate"
   response = agent.post(uri_translate, body, additional_headers)
   JSON.parse(response.body)["translations"][0]["translation"]
