@@ -236,7 +236,7 @@ def join_sentence(sentences)
   sentence
 end
 
-def blue_mix_translate(event, sentence, model:)
+def blue_mix_translate(_event, sentence, model:)
   body = {
     "model_id": model,
     "text": sentence
@@ -250,7 +250,7 @@ def blue_mix_translate(event, sentence, model:)
   additional_headers = {
     "content-type" => "application/json"
   }
-# TODO:エラー対応
+  # TODO: エラー対応
   uri_translate = "#{uri}/v2/translate"
   response = agent.post(uri_translate, body, additional_headers)
   JSON.parse(response.body)["translations"][0]["translation"]
@@ -342,22 +342,48 @@ bot.message(start_with: ",register") do |event|
 end
 
 # -----------------------------------------------------------------------------
-bot.command :make_img do |event, sentence1, sentence2|
-  path = "./tmp/XPchan_#{event.user.name}_#{Time.now.to_i}.png"
-
+def sentence_setting(sentence1, sentence2, sentence3)
   res_message = if sentence1.nil?
                   "（何かを言いたがっているようだ…）"
                 else
-                  "【XPちゃん】\n  #{sentence1}\n  #{sentence2}"
+                  "#{sentence1}\n#{sentence2}\n#{sentence3}"
                 end
+  res_message
+end
 
-  img = Magick::ImageList.new("./img/original.png")
+def hour_distinction
+  hour = Time.now.hour
 
-  Magick::Draw.new.annotate(img, 0, 0, 300, 500, res_message) do
-    self.font = "fonts/rounded-mplus-2c-bold.ttf"
-    self.fill = "white"
-    self.stroke = "black"
-    self.stroke_width = 1
+  img = if hour < 6
+          Magick::ImageList.new("./img/street001_night_dark.jpg")
+        elsif hour >= 6 || hour < 17
+          Magick::ImageList.new("./img/street001_day.jpg")
+        elsif hour >= 17 || hour < 19
+          Magick::ImageList.new("./img/street001_evening.jpg")
+        else
+          Magick::ImageList.new("./img/street001_night_light.jpg")
+        end
+  img
+end
+
+bot.command :make_img do |event, sentence1, sentence2, sentence3|
+  path = "./tmp/XPchan_#{event.user.name}_#{Time.now.to_i}.png"
+  sentence = sentence_setting(sentence1, sentence2, sentence3)
+
+  img = hour_distinction
+  front_img = Magick::ImageList.new("./img/front.png")
+  img.composite!(front_img, Magick::NorthWestGravity, Magick::OverCompositeOp)
+
+  Magick::Draw.new.annotate(img, 0, 0, 100, 490, "XPちゃん") do
+    self.font = "fonts/07LogoTypeGothic7.ttf"
+    self.fill = "#4a372b"
+    self.pointsize = 48
+    self.gravity = Magick::NorthWestGravity
+  end
+
+  Magick::Draw.new.annotate(img, 0, 0, 120, 540, sentence) do
+    self.font = "fonts/07LogoTypeGothic7.ttf"
+    self.fill = "#4a372b"
     self.pointsize = 36
     self.gravity = Magick::NorthWestGravity
   end
@@ -367,6 +393,10 @@ bot.command :make_img do |event, sentence1, sentence2|
   File.delete path
   nil
 end
+
+# 背景 http://ayaemo.skr.jp/
+# メッセージウィンドウ http://kopacurve.blog33.fc2.com/
+# フォント http://www.fontna.com/
 
 # update BOT status periodically
 scheduler = Rufus::Scheduler.new
