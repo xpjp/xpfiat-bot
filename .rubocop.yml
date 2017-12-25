@@ -37,6 +37,6 @@ Style/Documentation:
 Lint/UnderscorePrefixedVariableName:
   Enabled: false
 
-# ABCSize(デフォルトの15だと本プロジェクトには少し厳しいかなと思うので一旦19とする)
+# ABCSize(デフォルトの15だと本プロジェクトには少し厳しいかなと思うので一旦17とする)
 Metrics/AbcSize:
-  Max: 19
+  Max: 1７
