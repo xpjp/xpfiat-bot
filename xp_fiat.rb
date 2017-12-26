@@ -352,9 +352,9 @@ def select_image_by_hour
 
   if hour < 6
     Magick::ImageList.new("./img/street001_night_dark.jpg")
-  elsif hour >= 6 || hour < 17
+  elsif hour >= 6 && hour < 17
     Magick::ImageList.new("./img/street001_day.jpg")
-  elsif hour >= 17 || hour < 19
+  elsif hour >= 17 && hour < 19
     Magick::ImageList.new("./img/street001_evening.jpg")
   else
     Magick::ImageList.new("./img/street001_night_light.jpg")
