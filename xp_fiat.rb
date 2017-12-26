@@ -342,46 +342,42 @@ bot.message(start_with: ",register") do |event|
 end
 
 # -----------------------------------------------------------------------------
-def sentence_setting(sentence1, sentence2, sentence3)
-  res_message = if sentence1.nil?
-                  "（何かを言いたがっているようだ…）"
-                else
-                  "#{sentence1}\n#{sentence2}\n#{sentence3}"
-                end
-  res_message
+def generate_quote(sentence1, sentence2, sentence3)
+  return "（何かを言いたがっているようだ…）" if sentence1.nil?
+  "#{sentence1}\n#{sentence2}\n#{sentence3}"
 end
 
-def hour_distinction
+def select_image_by_hour
   hour = Time.now.hour
 
-  img = if hour < 6
-          Magick::ImageList.new("./img/street001_night_dark.jpg")
-        elsif hour >= 6 || hour < 17
-          Magick::ImageList.new("./img/street001_day.jpg")
-        elsif hour >= 17 || hour < 19
-          Magick::ImageList.new("./img/street001_evening.jpg")
-        else
-          Magick::ImageList.new("./img/street001_night_light.jpg")
-        end
-  img
+  if hour < 6
+    Magick::ImageList.new("./img/street001_night_dark.jpg")
+  elsif hour >= 6 || hour < 17
+    Magick::ImageList.new("./img/street001_day.jpg")
+  elsif hour >= 17 || hour < 19
+    Magick::ImageList.new("./img/street001_evening.jpg")
+  else
+    Magick::ImageList.new("./img/street001_night_light.jpg")
+  end
 end
 
 bot.command :make_img do |event, sentence1, sentence2, sentence3|
   path = "./tmp/XPchan_#{event.user.name}_#{Time.now.to_i}.png"
-  sentence = sentence_setting(sentence1, sentence2, sentence3)
+  img = select_image_by_hour
 
-  img = hour_distinction
   front_img = Magick::ImageList.new("./img/front.png")
   img.composite!(front_img, Magick::NorthWestGravity, Magick::OverCompositeOp)
 
-  Magick::Draw.new.annotate(img, 0, 0, 100, 490, "XPちゃん") do
-    self.font = "fonts/07LogoTypeGothic7.ttf"
-    self.fill = "#4a372b"
-    self.pointsize = 48
-    self.gravity = Magick::NorthWestGravity
+  if sentence1
+    Magick::Draw.new.annotate(img, 0, 0, 100, 490, "XPちゃん") do
+      self.font = "fonts/07LogoTypeGothic7.ttf"
+      self.fill = "#4a372b"
+      self.pointsize = 48
+      self.gravity = Magick::NorthWestGravity
+    end
   end
 
-  Magick::Draw.new.annotate(img, 0, 0, 120, 540, sentence) do
+  Magick::Draw.new.annotate(img, 0, 0, 120, 550, generate_quote(sentence1, sentence2, sentence3)) do
     self.font = "fonts/07LogoTypeGothic7.ttf"
     self.fill = "#4a372b"
     self.pointsize = 36
@@ -390,6 +386,7 @@ bot.command :make_img do |event, sentence1, sentence2, sentence3|
 
   img.write path
   event.send_file(File.open(path, "r"))
+  img.destroy!
   File.delete path
   nil
 end

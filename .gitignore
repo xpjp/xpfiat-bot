@@ -56,4 +56,7 @@ build-iPhoneSimulator/
 # for RubyMine
 .idea/
 
+# for OS X
+.DS_Store
+
 # End of https://www.gitignore.io/api/ruby
