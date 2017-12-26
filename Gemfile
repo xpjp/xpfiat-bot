@@ -9,7 +9,6 @@ gem "rmagick"
 gem "rufus-scheduler"
 
 group :development, :test do
-  gem "pry", require: false
   gem "rspec"
   gem "rubocop"
 end
