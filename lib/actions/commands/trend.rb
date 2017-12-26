@@ -3,6 +3,7 @@
 require "discordrb"
 require "mechanize"
 require "json"
+require "dotenv/load"
 
 module Actions
   module Commands

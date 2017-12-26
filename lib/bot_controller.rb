@@ -4,10 +4,7 @@ require "discordrb"
 require "mechanize"
 require "json"
 require "dotenv/load"
-# Dir["./**/*.rb"].each do |file|
-Dir["./actions/commands/*.rb"].each do |file|
-  require file
-end
+require "rufus-scheduler"
 
 class BotController
   def initialize

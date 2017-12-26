@@ -2,12 +2,7 @@
 
 require "discordrb"
 require "mechanize"
-require "json"
 require "net/http"
-require "uri"
-require "dotenv/load"
-require "RMagick"
-require "rufus-scheduler"
 require "active_support"
 require "active_support/core_ext/numeric/conversions"
 require "./lib/bot_controller"
