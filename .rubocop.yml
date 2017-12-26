@@ -39,4 +39,4 @@ Lint/UnderscorePrefixedVariableName:
 
 # ABCSize(デフォルトの15だと本プロジェクトには少し厳しいかなと思うので一旦17とする)
 Metrics/AbcSize:
-  Max: 17
+  Max: 17.5
