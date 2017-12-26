@@ -33,7 +33,6 @@ module Actions
         link_url = content_data["linkUrl"]
         "【#{title}】\n#{link_url} "
       end
-
     end
   end
 end

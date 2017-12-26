@@ -10,7 +10,7 @@ Dir["./actions/commands/*.rb"].each do |file|
 end
 
 class BotController
-  def initialize()
+  def initialize
     @bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix: ["?", "？"]
 
     # 連続のコマンド実行を制限する設定。:generalは10秒以内に1回に制限する。
@@ -22,8 +22,6 @@ class BotController
     @scheduler = Rufus::Scheduler.new
 
     @help_messages = {}
-
-    self
   end
 
   # Adds all commands from another container into this one. Existing commands will be overwritten.
@@ -35,7 +33,7 @@ class BotController
   def include_commands(container, msg)
     commands = container.instance_variable_get(:@commands)
     if !commands.empty? && msg
-      cmds = commands.keys.map {|k| "`?#{k}`"}.join(" or ")
+      cmds = commands.keys.map { |k| "`?#{k}`" }.join(" or ")
       @help_messages[cmds] = msg
     end
     @bot.include_commands(container)
@@ -52,9 +50,9 @@ class BotController
   #   定期処理を登録する
   # @param interval [String] interval like "5m", "100s"
   # @yield The block is executed when triggered.
-  def add_schedule(interval, &block)
+  def add_schedule(interval, &_block)
     @scheduler.every interval do
-      block.call(@bot)
+      yield @bot
     end
   end
 
@@ -71,14 +69,14 @@ class BotController
 
   private
 
-  def gen_help_message
-    command_messages = @help_messages.map do |cmd, msg|
-      if msg.is_a? Array
-        msg.map {|m| "#{cmd} #{m}" }
-      else
-        "#{cmd} #{msg}"
-      end
-    end.flatten.join("\n")
-    "Commands:\n#{command_messages}"
-  end
+    def gen_help_message
+      command_messages = @help_messages.map do |cmd, msg|
+        if msg.is_a? Array
+          msg.map { |m| "#{cmd} #{m}" }
+        else
+          "#{cmd} #{msg}"
+        end
+      end.flatten.join("\n")
+      "Commands:\n#{command_messages}"
+    end
 end

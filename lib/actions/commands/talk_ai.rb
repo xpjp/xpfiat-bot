@@ -52,7 +52,6 @@ module Actions
         utt = JSON.parse(response.body)["utt"]
         event.send_message("#{name}「#{utt} 」")
       end
-
     end
   end
 end

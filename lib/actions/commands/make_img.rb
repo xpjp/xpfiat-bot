@@ -5,7 +5,7 @@ require "RMagick"
 
 module Actions
   module Commands
-
+    # ノベルゲーム風画像の生成
     module MakeImg
       extend Discordrb::Commands::CommandContainer
 

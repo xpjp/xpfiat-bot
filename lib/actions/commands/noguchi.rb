@@ -6,7 +6,7 @@ require "json"
 
 module Actions
   module Commands
-
+    # 1,000円でどれだけXPを買えるか
     module Noguchi
       extend Discordrb::Commands::CommandContainer
 
