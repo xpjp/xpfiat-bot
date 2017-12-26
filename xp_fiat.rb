@@ -5,10 +5,10 @@ require "mechanize"
 require "net/http"
 require "active_support"
 require "active_support/core_ext/numeric/conversions"
+require "active_support/dependencies"
 require "./lib/bot_controller"
-Dir["./lib/**/*.rb"].each do |f|
-  require f
-end
+
+ActiveSupport::Dependencies.autoload_paths << "./lib"
 
 # -----------------------------------------------------------------------------
 # Xp->Jpyの換算
