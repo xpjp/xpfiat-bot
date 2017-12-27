@@ -145,7 +145,7 @@ def how_rain(event, max_history)
       # Xp-Bot の発言であれば、それがrainコマンドの成功のメッセージか確認する
       if message.content.include?("Brewing Storm")
         mention_to = message.mentions.first.id
-        if buffer.has_key?(mention_to)
+        if buffer.has_key?(mention_to) && buffer[mention_to].size >= 1
           # 対象ユーザーの発言も見つけているのでsumに足し、waitingから引く
           amount = buffer[mention_to].delete_at(0)
           sum += amount
@@ -154,7 +154,7 @@ def how_rain(event, max_history)
       elsif message.content.include?("min rain amount is") || message.content.include?("Insufficient Balance")
         mention_to = message.mentions.first.id
         # 失敗メッセージ -> 消すだけ
-        if buffer[mention_to].size >= 1
+        if buffer.has_key?(mention_to) && buffer[mention_to].size >= 1
           amount = buffer[mention_to].delete_at(0)
           waiting -= amount
         end
