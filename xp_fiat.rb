@@ -121,17 +121,47 @@ end
 bot.command [:how_rain] { |event| how_rain(event, 100) }
 
 def how_rain(event, max_history)
-  messages = event.channel.history(max_history)
+  messages = event.channel.history(max_history).reverse # 時系列順
+  buffer = {}
   sum = 0
+  waiting = 0
   messages.each do |message|
-    next unless message.content.include?(",rain")
-    divided_message = message.content.split(" ")
-    if divided_message.length >= 2
-      amount = divided_message[1].to_i
-      sum += amount
+    if message.content.include?(",rain")
+      # rainコマンドであれば、MessageのIDとamountをメモする
+      divided_message = message.content.split(" ")
+      if divided_message.length >= 2
+        amount = divided_message[1].to_i
+        user_id = message.author.id
+
+        # この発言のユーザーのキーはあるか？
+        unless buffer.has_key?(user_id)
+          buffer[user_id] = []
+        end
+
+        buffer[user_id] << amount
+        waiting += amount # 待機中に足しておく
+      end
+    elsif message.author.id == 352815000257167362
+      # Xp-Bot の発言であれば、それがrainコマンドの成功のメッセージか確認する
+      if message.content.include?("Brewing Storm")
+        mention_to = message.mentions.first.id
+        if buffer.has_key?(mention_to)
+          # 対象ユーザーの発言も見つけているのでsumに足し、waitingから引く
+          amount = buffer[mention_to].delete_at(0)
+          sum += amount
+          waiting -= amount
+        end
+      elsif message.content.include?("min rain amount is") || message.content.include?("Insufficient Balance")
+        mention_to = message.mentions.first.id
+        # 失敗メッセージ -> 消すだけ
+        if buffer[mention_to].size >= 1
+          amount = buffer[mention_to].delete_at(0)
+          waiting -= amount
+        end
+      end
     end
   end
-  event.send_message("只今の降雨量は #{sum.to_s(:delimited)} Xpです。")
+  event.send_message("只今の降雨量は #{sum.to_s(:delimited)} Xpです。(Bot待ち : #{waiting.to_s(:delimited)})")
 end
 
 # -----------------------------------------------------------------------------
