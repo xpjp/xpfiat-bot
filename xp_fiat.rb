@@ -11,6 +11,7 @@ require "RMagick"
 require "rufus-scheduler"
 require "active_support"
 require "active_support/core_ext/numeric/conversions"
+require "negapoji"
 
 bot = Discordrb::Commands::CommandBot.new token: ENV["TOKEN"], client_id: ENV["CLIENT_ID"], prefix: ["?", "？"]
 
@@ -47,6 +48,7 @@ bot.command :help do |event|
       ?doge or ?犬 1DOGEで買えるXPの量
       ?how_rain 降雨量の追加(直近100メッセージ)
       ?talk_ai [message] AIと対話できます
+      ?ta_plus [message] AIと対話(顔付き)
     HEREDOC
 
     embed.description = help
@@ -178,7 +180,7 @@ def talk(event, message)
   end
 end
 
-def docomo_talk(event:, message:, name:, type:)
+def docomo_talk(event:, message:, name:, type:, plus: false)
   body = {
     utt: message,
     mode: "dialog",
@@ -187,7 +189,8 @@ def docomo_talk(event:, message:, name:, type:)
   api_key = ENV["DOCOMO_TALK_APIKEY"]
   response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
   utt = JSON.parse(response.body)["utt"]
-  event.send_message("#{name}「#{utt} 」")
+  return "#{utt}" if plus
+  event.send_message("#{name}「#{utt}」")
 end
 
 # -----------------------------------------------------------------------------
@@ -236,7 +239,7 @@ def join_sentence(sentences)
   sentence
 end
 
-def blue_mix_translate(event, sentence, model:)
+def blue_mix_translate(sentence, model:)
   body = {
     "model_id": model,
     "text": sentence
@@ -250,7 +253,7 @@ def blue_mix_translate(event, sentence, model:)
   additional_headers = {
     "content-type" => "application/json"
   }
-# TODO:エラー対応
+# TODO: エラー対応
   uri_translate = "#{uri}/v2/translate"
   response = agent.post(uri_translate, body, additional_headers)
   JSON.parse(response.body)["translations"][0]["translation"]
@@ -367,6 +370,26 @@ bot.command :make_img do |event, sentence1, sentence2|
   File.delete path
   nil
 end
+
+#------------------------------------------------------------------------------
+# xp-chan emotion
+bot.command :ta_plus do |event, message|
+  comment = docomo_talk(event: event, message: message, name: "Xp様", type: "10", plus: true)
+  event.channel.send_embed do |embed|
+    # embed_setting
+    embed.title = "Xp様"
+    embed.description = "#{event.user.mention}\n" + comment
+    emotion = Negapoji.judge(comment) if comment.is_a?(String)
+    if emotion == "positive"
+      embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: \
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM_pppuatX_vvXw6ZDRQ_3GouyV9C0rrf8qMl1SlkYoDie6Y5l")
+    else
+      embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: \
+        "https://media.istockphoto.com/vectors/large-sad-crying-yellow-emoticon-cartoon-vector-id468900488")
+    end
+  end
+end
+#-------------------------------------------------------------------------------
 
 # update BOT status periodically
 scheduler = Rufus::Scheduler.new
