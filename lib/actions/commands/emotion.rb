@@ -2,7 +2,6 @@
 
 require "discordrb"
 require "negapoji"
-require "talk_ai"
 
 module Actions
   module Commands
@@ -10,8 +9,8 @@ module Actions
     module Emotion
       extend Discordrb::Commands::CommandContainer
 
-      bot.command :ta_plus do |event, message|
-        comment = docomo_talk(event: event, message: message, name: "Xp様", type: "10", plus: true)
+      command :ta_plus do |event, message|
+        comment = docomo_talk(message: message, type: "10")
         event.channel.send_embed do |embed|
           # embed_setting
           embed.title = "Xp様"
