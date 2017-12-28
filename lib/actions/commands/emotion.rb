@@ -6,7 +6,7 @@ require "negapoji"
 module Actions
   module Commands
     # embedを使用したaiの応答
-    module Emotion
+    module TalkAiwithEmotion
       extend Discordrb::Commands::CommandContainer
 
       command :ta_plus do |event, message|
@@ -14,7 +14,7 @@ module Actions
         event.channel.send_embed do |embed|
           # embed_setting
           embed.title = "Xp様"
-          embed.description = "#{event.user.mention}\n" + comment
+          embed.description = "#{event.user.mention}\n#{comment}"
           emotion = Negapoji.judge(comment) if comment.is_a?(String)
           if emotion == "positive"
             embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: \
@@ -36,8 +36,7 @@ module Actions
         }.to_json
         api_key = ENV["DOCOMO_TALK_APIKEY"]
         response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
-        utt = JSON.parse(response.body)["utt"]
-        return "#{utt}"
+        JSON.parse(response.body)["utt"]
       end
     end
   end
