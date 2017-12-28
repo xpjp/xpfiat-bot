@@ -16,17 +16,19 @@ module Actions
           embed.title = "Xp様"
           embed.description = "#{event.user.mention}\n#{comment}"
           emotion = Negapoji.judge(comment) if comment.is_a?(String)
-          if emotion == "positive"
-            embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: \
-              "https://cdn.discordapp.com/attachments/395621106716901376/395634291343884291/xpface1.png")
-          else
-            embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: \
-              "https://cdn.discordapp.com/attachments/395621106716901376/395634301644963850/xpface3.png")
-          end
+          embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: judge_emotion(emotion: emotion))
         end
       end
 
       module_function
+
+      def judge_emotion(emotion:)
+        if emotion == "positive"
+          "https://cdn.discordapp.com/attachments/395621106716901376/395634291343884291/xpface1.png"
+        else
+          "https://cdn.discordapp.com/attachments/395621106716901376/395634301644963850/xpface3.png"
+        end
+      end
 
       def docomo_talk(message:, type:)
         body = {
