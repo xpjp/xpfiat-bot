@@ -167,18 +167,37 @@ end
 
 def talk(event, message)
   return event.send_message("？？？「...なに？...話してくれないと何も伝わらないわよ、ばか 」") if message.nil?
-
+  # TODO: そのうちまとめます。 Ryo
+  message = ""
+  name = ""
+  name_en = ""
   case rand(1..3)
   when 1
-    docomo_talk(event: event, message: message, name: "Xp様", type: "10")
+    message = docomo_talk(message: message, type: "10")
+    name = "Xp様"
+    name_en = "Ms.Xp"
   when 2
-    docomo_talk(event: event, message: message, name: "浪速のおっちゃん", type: "20")
+    message = docomo_talk(message: message, type: "20")
+    name = "浪速のおっちゃん"
+    name_en = "James"
   when 3
-    docomo_talk(event: event, message: message, name: "赤さん", type: "30")
+    message = docomo_talk(message: message, type: "30")
+    name = "赤さん"
+    name_en = "catty"
   end
+  talk2(message: message, name: name, name_en: name_en)
 end
 
-def docomo_talk(event:, message:, name:, type:)
+def talk2(message:, name:, name_en:)
+  if rand(0..1).positive?
+    message = blue_mix_translate(message, model: "ja-en")
+    name = name_en
+  end
+
+  event.send_message("#{name}「#{message} 」")
+end
+
+def docomo_talk(message:, type:)
   body = {
     utt: message,
     mode: "dialog",
@@ -186,8 +205,7 @@ def docomo_talk(event:, message:, name:, type:)
   }.to_json
   api_key = ENV["DOCOMO_TALK_APIKEY"]
   response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
-  utt = JSON.parse(response.body)["utt"]
-  event.send_message("#{name}「#{utt} 」")
+  JSON.parse(response.body)["utt"]
 end
 
 # -----------------------------------------------------------------------------
@@ -219,12 +237,12 @@ end
 # 翻訳(IBM)
 
 bot.command :jp2en do |event, *sentences|
-  translated = blue_mix_translate(event, join_sentence(sentences), model: "ja-en")
+  translated = blue_mix_translate(join_sentence(sentences), model: "ja-en")
   event.send_message(translated)
 end
 
 bot.command :en2jp do |event, *sentences|
-  translated = blue_mix_translate(event, join_sentence(sentences), model: "en-ja")
+  translated = blue_mix_translate(join_sentence(sentences), model: "en-ja")
   event.send_message(translated)
 end
 
@@ -236,7 +254,7 @@ def join_sentence(sentences)
   sentence
 end
 
-def blue_mix_translate(event, sentence, model:)
+def blue_mix_translate(sentence, model:)
   body = {
     "model_id": model,
     "text": sentence
@@ -250,7 +268,7 @@ def blue_mix_translate(event, sentence, model:)
   additional_headers = {
     "content-type" => "application/json"
   }
-# TODO:エラー対応
+  # TODO:エラー対応
   uri_translate = "#{uri}/v2/translate"
   response = agent.post(uri_translate, body, additional_headers)
   JSON.parse(response.body)["translations"][0]["translation"]
