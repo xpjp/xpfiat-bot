@@ -42,7 +42,7 @@ module Actions
         end
       end
 
-      def docomo_talk(event:, message:, name:, type:, plus: false)
+      def docomo_talk(event:, message:, name:, type:)
         body = {
           utt: message,
           mode: "dialog",
@@ -51,7 +51,6 @@ module Actions
         api_key = ENV["DOCOMO_TALK_APIKEY"]
         response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
         utt = JSON.parse(response.body)["utt"]
-        return "#{utt}" if plus
         event.send_message("#{name}「#{utt}」")
       end
     end

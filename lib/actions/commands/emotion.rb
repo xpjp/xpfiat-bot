@@ -25,6 +25,18 @@ module Actions
           end
         end
       end
+
+      def docomo_talk(message:, type:)
+        body = {
+          utt: message,
+          mode: "dialog",
+          t: type
+        }.to_json
+        api_key = ENV["DOCOMO_TALK_APIKEY"]
+        response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
+        utt = JSON.parse(response.body)["utt"]
+        return "#{utt}"
+      end
     end
   end
 end
