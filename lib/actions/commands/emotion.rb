@@ -6,7 +6,7 @@ require "negapoji"
 module Actions
   module Commands
     # embedを使用したaiの応答
-    module TalkAiwithEmotion
+    module TalkAIwithEmotion
       extend Discordrb::Commands::CommandContainer
 
       command :ta_plus do |event, message|
