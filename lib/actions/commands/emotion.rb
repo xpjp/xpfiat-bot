@@ -26,6 +26,8 @@ module Actions
         end
       end
 
+      module_function
+
       def docomo_talk(message:, type:)
         body = {
           utt: message,
