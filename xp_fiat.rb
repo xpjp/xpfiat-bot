@@ -112,8 +112,7 @@ bc.include_commands Actions::Commands::MakeImg, false # TODO: helpメッセー�
 bc.include_commands Actions::Commands::HowRain, "降雨量の追加(直近100メッセージ)"
 bc.include_commands Actions::Commands::CE, "CoinExhangeのXP/DOGE"
 bc.include_commands Actions::Commands::CM, "CoinsMarketsのXP/DOGE"
-bc.include_commands Actions::Commands::TalkAI, "[message] AIと対話できます"
-bc.include_commands Actions::Commands::TalkAIwithEmotion, "[message] AIと対話(顔付き)"
+bc.include_commands Actions::Commands::TalkAI, "[message] AIと対話できます(表情付きも可)"
 bc.include_commands Actions::Commands::Trend, false
 bc.include_commands Actions::Commands::Translate, false
 
