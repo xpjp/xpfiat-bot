@@ -47,10 +47,10 @@ end
 # -----------------------------------------------------------------------------
 def xp2jpy(event, param1)
   message =
-    if (amount = param1.to_f).positive?
+    if (amount = param1.to_i).positive?
       _xp_jpy = xp_jpy * amount
       "#{event.user.mention} <:xpchan01:391497596461645824>\
-＜ #{amount.to_i.to_s(:delimited)}XPはいま #{_xp_jpy.to_s(:delimited)} 円だよ〜"
+＜ #{amount.to_s(:delimited)}XPはいま #{_xp_jpy.to_s(:delimited)} 円だよ〜"
     else
       _xp_jpy = xp_jpy.round(8)
       "#{event.user.mention} <:xpchan01:391497596461645824>＜ 1XPはいま #{_xp_jpy.to_s(:delimited)} 円だよ〜"
