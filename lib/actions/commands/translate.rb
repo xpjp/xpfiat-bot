@@ -12,30 +12,19 @@ module Actions
       extend Discordrb::Commands::CommandContainer
 
       command :jp2en do |event, *sentences|
-        translated = blue_mix_translate(event, join_sentence(sentences), model: "ja-en")
+        translated = blue_mix_translate(sentences.join(" "), "ja-en")
         event.send_message(translated)
       end
 
       command :en2jp do |event, *sentences|
-        translated = blue_mix_translate(event, join_sentence(sentences), model: "en-ja")
+        translated = blue_mix_translate(sentences.join(" "), "en-ja")
         event.send_message(translated)
       end
 
       module_function
 
-      def join_sentence(sentences)
-        sentence = ""
-        sentences.each do |word|
-          sentence += "#{word} "
-        end
-        sentence
-      end
-
-      def blue_mix_translate(_event, sentence, model:)
-        body = {
-          "model_id": model,
-          "text": sentence
-        }.to_json
+      def blue_mix_translate(text, model_id)
+        body = { "text": text, "model_id": model_id }.to_json
         agent = Mechanize.new
         uri = "https://gateway.watsonplatform.net/language-translator/api"
         agent.add_auth(uri, ENV["BLUE_MIX_USER"], ENV["BLUE_MIX_PASS"])
