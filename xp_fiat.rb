@@ -108,7 +108,7 @@ bc.include_commands Actions::Commands::Yukichi, "一万円で買えるXPの量"
 bc.include_commands Actions::Commands::Doge, "1DOGEで買えるXPの量"
 bc.include_commands Actions::Commands::XpJpy, ["1XPの日本円換算", "[amount] amount分のXPの日本円換算"]
 bc.include_commands Actions::Commands::JpyXp, "[amount] 日本円でどれだけ買えるか"
-bc.include_commands Actions::Commands::MakeImg, false # TODO: helpメッセージ書く
+bc.include_commands Actions::Commands::MakeImg, "[sentence] 半角スペースで改行 ノベルゲーム風の画像を生成"
 bc.include_commands Actions::Commands::HowRain, "降雨量の追加(直近100メッセージ)"
 bc.include_commands Actions::Commands::CE, "CoinExhangeのXP/DOGE"
 bc.include_commands Actions::Commands::CM, "CoinsMarketsのXP/DOGE"
