@@ -4,6 +4,8 @@ require "discordrb"
 require "mechanize"
 require "json"
 require "dotenv/load"
+require "discordrb"
+require "negapoji"
 
 module Actions
   module Commands
@@ -27,6 +29,17 @@ module Actions
         docomo_talk(event: event, message: message, name: "赤さん", type: "30")
       end
 
+      command :ta_p do |event, message|
+        comment = docomo_talk(event: event, message: message, name: "Xp様", type: "10", emo: true)
+        event.channel.send_embed do |embed|
+          # embed_setting
+          embed.title = "Xp様"
+          embed.description = "#{event.user.mention}\n#{comment}"
+          emotion = Negapoji.judge(comment) if comment.is_a?(String)
+          embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: judge_emotion(emotion: emotion))
+        end
+      end
+
       module_function
 
       def talk(event, message)
@@ -42,7 +55,7 @@ module Actions
         end
       end
 
-      def docomo_talk(event:, message:, name:, type:)
+      def docomo_talk(event:, message:, name:, type:, emo: false)
         body = {
           utt: message,
           mode: "dialog",
@@ -51,7 +64,16 @@ module Actions
         api_key = ENV["DOCOMO_TALK_APIKEY"]
         response = Mechanize.new.post("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}", body)
         utt = JSON.parse(response.body)["utt"]
-        event.send_message("#{name}「#{utt} 」")
+        return utt if emo
+        event.send_message("#{name}「#{utt}」")
+      end
+
+      def judge_emotion(emotion:)
+        if emotion == "positive"
+          "https://cdn.discordapp.com/attachments/395621106716901376/395634291343884291/xpface1.png"
+        else
+          "https://cdn.discordapp.com/attachments/395621106716901376/395634301644963850/xpface3.png"
+        end
       end
     end
   end
