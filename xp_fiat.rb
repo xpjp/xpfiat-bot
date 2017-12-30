@@ -45,17 +45,25 @@ def xp_jpy
 end
 
 # -----------------------------------------------------------------------------
-def xp2jpy(event, param1)
-  message =
-    if (amount = param1.to_i).positive?
-      _xp_jpy = xp_jpy * amount
-      "#{event.user.mention} <:xpchan01:391497596461645824>\
-＜ #{amount.to_s(:delimited)}XPはいま #{_xp_jpy.round(4).to_s(:delimited)} 円だよ〜"
-    else
-      _xp_jpy = xp_jpy
-      "#{event.user.mention} <:xpchan01:391497596461645824>＜ 1XPはいま #{_xp_jpy.round(4).to_s(:delimited)} 円だよ〜"
-    end
-  message ||= ":satisfied:"
+def xp2jpy(event)
+  # rubocop:disable Style/FormatStringToken
+  message = <<~HEREDOC
+    #{event.user.mention}
+    ただいま `?いくら` コマンドはサーバーへの過負荷により動作を停止しています。
+    今後は、XpFiat-BOT のステータスから現在価格をご確認ください。
+
+    PC をご利用の方は、画面右をご確認下さい。
+    スマートフォンをご利用の方は、画面右上のグループメニューからご確認いただけます。
+
+    また、XPの日本円換算を知りたい方はクリプトフォリオをおすすめします。
+
+    iOS
+    https://itunes.apple.com/jp/app/cryptofolio-%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%83%95%E3%82%A9%E3%83%AA%E3%82%AA/id1272475312?mt=8
+
+    Android
+    https://play.google.com/store/apps/details?id=com.appruns.and.dist.cryptofolio&hl=ja
+  HEREDOC
+  # rubocop:enable Style/FormatStringToken
   event.respond message
 end
 
