@@ -68,8 +68,7 @@ def xp2jpy(event)
 end
 
 # -----------------------------------------------------------------------------
-def how_rain(event:, max_history:)
-  messages = event.channel.history(max_history)
+def how_rain(messages:)
   sum = 0.0
   messages.each do |message|
     # Xp-Bot以外は無視 (一般ユーザーのRainedコピペなどに反応しないように)

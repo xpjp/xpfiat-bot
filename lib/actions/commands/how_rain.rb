@@ -9,7 +9,8 @@ module Actions
       extend Discordrb::Commands::CommandContainer
 
       command [:how_rain] do |event|
-        how_rain(event: event, max_history: 100)
+        messages = event.channel.history(max_history)
+        how_rain(messages: messages)
       end
     end
   end
