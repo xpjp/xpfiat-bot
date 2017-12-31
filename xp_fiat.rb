@@ -73,7 +73,7 @@ def how_rain(event, max_history)
   sum = 0.0
   messages.each do |message|
     # Xp-Bot以外は無視 (一般ユーザーのRainedコピペなどに反応しないように)
-    next if message.author.id != 352815000257167362
+    next if message.author.id != 352_815_000_257_167_362
 
     # 正規表現で、ユーザーあたりのXPとユーザー数を取得し、乗算して合計する
     # 本家Botの出力が変わったら計算できないのでその場合は更新すること
