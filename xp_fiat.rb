@@ -85,7 +85,7 @@ def how_rain(event, max_history)
   if sum.to_i == sum
     # ぴったり整数になるようであれば、intにしてからstringにする
     event.send_message("只今の降雨量は #{sum.to_i.to_s(:delimited)} Xpです。")
-  elsif
+  else
     # 整数でないrainがあった場合、加算した際に誤差の問題で桁が大きくなっていることがあるのでここでもround
     event.send_message("只今の降雨量は #{sum.round(7).to_s(:delimited)} Xpです。")
   end
