@@ -70,16 +70,25 @@ end
 # -----------------------------------------------------------------------------
 def how_rain(event, max_history)
   messages = event.channel.history(max_history)
-  sum = 0
+  sum = 0.0
   messages.each do |message|
-    next unless message.content.include?(",rain")
-    divided_message = message.content.split(" ")
-    if divided_message.length >= 2
-      amount = divided_message[1].to_i
-      sum += amount
+    # Xp-Bot以外は無視 (一般ユーザーのRainedコピペなどに反応しないように)
+    next if message.author.id != 352815000257167362
+
+    # 正規表現で、ユーザーあたりのXPとユーザー数を取得し、乗算して合計する
+    # 本家Botの出力が変わったら計算できないのでその場合は更新すること
+    if message.content =~ /Rained:\s(\d+\.?\d*)\sTo:\s(\d+)\s/
+      amount = $1.to_f * $2.to_i
+      sum += amount.round(7) # 第七位までで四捨五入、整数のrainであれば整数になるはず
     end
   end
-  event.send_message("只今の降雨量は #{sum.to_s(:delimited)} Xpです。")
+  if sum.to_i == sum
+    # ぴったり整数になるようであれば、intにしてからstringにする
+    event.send_message("只今の降雨量は #{sum.to_i.to_s(:delimited)} Xpです。")
+  elsif
+    # 整数でないrainがあった場合、加算した際に誤差の問題で桁が大きくなっていることがあるのでここでもround
+    event.send_message("只今の降雨量は #{sum.round(7).to_s(:delimited)} Xpです。")
+  end
 end
 
 # -----------------------------------------------------------------------------
