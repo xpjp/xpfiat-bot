@@ -82,13 +82,11 @@ def how_rain(event, max_history)
       sum += amount.round(7) # 第七位までで四捨五入、整数のrainであれば整数になるはず
     end
   end
-  if sum.to_i == sum
-    # ぴったり整数になるようであれば、intにしてからstringにする
-    event.send_message("只今の降雨量は #{sum.to_i.to_s(:delimited)} Xpです。")
-  else
-    # 整数でないrainがあった場合、加算した際に誤差の問題で桁が大きくなっていることがあるのでここでもround
-    event.send_message("只今の降雨量は #{sum.round(7).to_s(:delimited)} Xpです。")
-  end
+
+  # ぴったり整数になるようであれば、intにしてからstringにする
+  # 整数でないrainがあった場合、加算した際に誤差の問題で桁が大きくなっていることがあるのでここでもround
+  rainfall = sum.to_i == sum ? sum.to_i : sum.round(7)
+  event.send_message("只今の降雨量は #{rainfall.to_s(:delimited)} Xpです。")
 end
 
 # -----------------------------------------------------------------------------
