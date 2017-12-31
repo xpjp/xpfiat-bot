@@ -9,7 +9,7 @@ module Actions
       extend Discordrb::Commands::CommandContainer
 
       command [:how_rain] do |event|
-        how_rain(event, 100)
+        how_rain(event: event, max_history: 100)
       end
     end
   end

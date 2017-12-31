@@ -68,7 +68,7 @@ def xp2jpy(event)
 end
 
 # -----------------------------------------------------------------------------
-def how_rain(event, max_history)
+def how_rain(event:, max_history:)
   messages = event.channel.history(max_history)
   sum = 0.0
   messages.each do |message|
