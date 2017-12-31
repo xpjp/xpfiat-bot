@@ -78,7 +78,7 @@ def how_rain(event, max_history)
     # 正規表現で、ユーザーあたりのXPとユーザー数を取得し、乗算して合計する
     # 本家Botの出力が変わったら計算できないのでその場合は更新すること
     if message.content =~ /Rained:\s(\d+\.?\d*)\sTo:\s(\d+)\s/
-      amount = $1.to_f * $2.to_i
+      amount = Regexp.last_match(1).to_f * Regexp.last_match(2).to_i
       sum += amount.round(7) # 第七位までで四捨五入、整数のrainであれば整数になるはず
     end
   end
