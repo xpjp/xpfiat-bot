@@ -12,11 +12,19 @@ module Actions
       extend Discordrb::Commands::CommandContainer
 
       command :markov_call do |event, *sentences|
-
-        event.send_message(sentences.join(" "))
+        p sentences
+        event.send_message(join_sentence(sentences))
       end
 
       module_function
+
+      def join_sentence(sentences)
+        sentence = ""
+        sentences.each do |word|
+          sentence += "#{word} "
+        end
+        sentence
+      end
 
       def markov_call(text)
 
