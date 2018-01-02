@@ -136,6 +136,7 @@ bc.include_commands Actions::Commands::Translate, false
 
 bc.include! Actions::Events::JoinAnnouncer
 bc.include! Actions::Events::CommandPatroller
+bc.include! Actions::Events::SubscribeMessage
 
 bc.include! Actions::Messages::Balance
 bc.include! Actions::Messages::Register
