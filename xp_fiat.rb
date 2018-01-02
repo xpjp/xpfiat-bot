@@ -130,6 +130,7 @@ bc.include_commands Actions::Commands::HowRain, "降雨量の追加(直近100メ
 bc.include_commands Actions::Commands::CE, "CoinExhangeのXP/DOGE"
 bc.include_commands Actions::Commands::CM, "CoinsMarketsのXP/DOGE"
 bc.include_commands Actions::Commands::TalkAI, "[message] AIと対話できます(表情付きも可)"
+bc.include_commands Actions::Commands::MarkovCall, "markov連鎖学習用"
 bc.include_commands Actions::Commands::Trend, false
 bc.include_commands Actions::Commands::Translate, false
 

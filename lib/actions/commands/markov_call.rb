@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 require "discordrb"
-require "mechanize"
-require "json"
-require "dotenv/load"
+
 
 module Actions
   module Commands
@@ -12,7 +10,7 @@ module Actions
       extend Discordrb::Commands::CommandContainer
 
       command :markov_call do |event, *sentences|
-        p sentences
+        p event
         event.send_message(join_sentence(sentences))
       end
 
