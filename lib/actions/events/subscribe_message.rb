@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "discordrb"
+require "mechanize"
 
 # 特定チャンネルで行われた発言を収集し、指定されたDBに蓄積していく。
 module Actions
@@ -14,10 +15,14 @@ module Actions
         break if !event.message || !event.channel || !event.user
         is_target = @subscribe_config["target_channels"].include?(event.channel.name)
 
-        # 指定したチャネルの発言をDBに登録していく。
+        body = {
+          sentence: event.message.content
+        }.to_json
+        response = Mechanize.new.post("http://198.13.43.77:8080/insert", body )
+        json = JSON.parse(response.body)
 
         # Debug用
-        event.respond "#{event.user.mention} #{event.message.content}" if is_target
+        event.respond "#{event.user.mention} #{event.message.content} : #{json['message']}" if is_target
       end
     end
   end
