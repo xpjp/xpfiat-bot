@@ -68,27 +68,25 @@ def xp2jpy(event)
 end
 
 # -----------------------------------------------------------------------------
-def how_rain(event, max_history)
-  messages = event.channel.history(max_history)
+def how_rain(messages:)
   sum = 0.0
   messages.each do |message|
     # Xp-Bot以外は無視 (一般ユーザーのRainedコピペなどに反応しないように)
-    next if message.author.id != 352815000257167362
+    next if message.author.id != 352_815_000_257_167_362
 
     # 正規表現で、ユーザーあたりのXPとユーザー数を取得し、乗算して合計する
     # 本家Botの出力が変わったら計算できないのでその場合は更新すること
     if message.content =~ /Rained:\s(\d+\.?\d*)\sTo:\s(\d+)\s/
-      amount = $1.to_f * $2.to_i
+      amount = Regexp.last_match(1).to_f * Regexp.last_match(2).to_i
       sum += amount.round(7) # 第七位までで四捨五入、整数のrainであれば整数になるはず
     end
   end
-  if sum.to_i == sum
-    # ぴったり整数になるようであれば、intにしてからstringにする
-    event.send_message("只今の降雨量は #{sum.to_i.to_s(:delimited)} Xpです。")
-  elsif
-    # 整数でないrainがあった場合、加算した際に誤差の問題で桁が大きくなっていることがあるのでここでもround
-    event.send_message("只今の降雨量は #{sum.round(7).to_s(:delimited)} Xpです。")
-  end
+end
+
+def how_rainfall(sum:)
+  # ぴったり整数になるようであれば、intにしてからstringにする
+  # 整数でないrainがあった場合、加算した際に誤差の問題で桁が大きくなっていることがあるのでここでもround
+  sum.to_i == sum ? sum.to_i : sum.round(7)
 end
 
 # -----------------------------------------------------------------------------

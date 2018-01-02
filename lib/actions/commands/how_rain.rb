@@ -9,7 +9,10 @@ module Actions
       extend Discordrb::Commands::CommandContainer
 
       command [:how_rain] do |event|
-        how_rain(event, 100)
+        messages = event.channel.history(max_history)
+        sum = how_rain(messages: messages)
+        rainfall = how_rainfall(sum: sum)
+        event.send_message("只今の降雨量は #{rainfall.to_s(:delimited)} Xpです。")
       end
     end
   end
