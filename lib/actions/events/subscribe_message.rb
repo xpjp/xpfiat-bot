@@ -12,7 +12,7 @@ module Actions
 
       message do |event|
         # apiの仕様的に存在しないことが保証されているかわからなかったので、落ちないように一応ガード節
-        break if !event.message || !event.channel || !event.user
+        break if !event.message || !event.channel || !event.user || event.message.content[0] =~ /\?|？/
         is_target = @subscribe_config["target_channels"].include?(event.channel.name)
 
         body = {
