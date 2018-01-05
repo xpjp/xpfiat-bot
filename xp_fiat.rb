@@ -58,10 +58,10 @@ def xp2jpy(event)
     また、XPの日本円換算を知りたい方はクリプトフォリオをおすすめします。
 
     iOS
-    https://itunes.apple.com/jp/app/cryptofolio-%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%83%95%E3%82%A9%E3%83%AA%E3%82%AA/id1272475312?mt=8
+    <https://goo.gl/WgyN6A>
 
     Android
-    https://play.google.com/store/apps/details?id=com.appruns.and.dist.cryptofolio&hl=ja
+    <https://goo.gl/vQBg8R>
   HEREDOC
   # rubocop:enable Style/FormatStringToken
   event.respond message
