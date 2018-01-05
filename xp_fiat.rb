@@ -7,7 +7,6 @@ require "active_support"
 require "active_support/core_ext/numeric/conversions"
 require "active_support/dependencies"
 require "./lib/bot_controller"
-require "yen"
 
 ActiveSupport::Dependencies.autoload_paths << "./lib"
 
@@ -118,9 +117,24 @@ def doge(event)
   event.respond "#{event.user.mention} <:doge:391497526278225920>＜ わい一匹で、#{amount.to_i.to_s(:delimited)} くらいXPが買えるワン"
 end
 
+# -----------------------------------------------------------------------------
+def to_j(int_jpy)
+  # insertは破壊的なメソッドなので元の文字列が変化しないようにコピー
+  dup_str = int_jpy.to_s
+  # 後ろから6番目("123456789円"の"5"の後ろに"万"を挿入)
+  dup_str.insert(-6, '万') if dup_str.length >= 6
+  # 後ろから11番目("12345万6789円"の"1"の後ろに"億"を挿入)
+  dup_str.insert(-11, '億') if dup_str.length >= 11
+  # 後ろから16番目("6兆7891億2345万6789円"の"6"の後ろに"兆"を挿入)
+  dup_str.insert(-16, '兆') if dup_str.length >= 16
+  dup_str
+end
+
+# -----------------------------------------------------------------------------
 def market_cap(event)
   mcap_value = read_price(:xp_mcap_jpy)
-  event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ 私の戦闘力は#{mcap_value.to_i.to_j}円 です"
+  str_mcap_jpy = to_j(mcap_value.to_i)
+  event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ 私の戦闘力は#{str_mcap_jpy}円 です"
 end
 
 bc = BotController.new

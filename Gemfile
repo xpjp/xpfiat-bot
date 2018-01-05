@@ -9,7 +9,6 @@ gem "natto"
 gem "negapoji", git: "git://github.com/hatt0519/negapoji.git"
 gem "rmagick"
 gem "rufus-scheduler"
-gem "yen"
 
 group :development, :test do
   gem "pry-byebug"
