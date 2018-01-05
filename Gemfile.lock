@@ -116,6 +116,7 @@ GEM
     websocket-client-simple (0.3.0)
       event_emitter
       websocket
+    yen (0.0.2)
 
 PLATFORMS
   ruby
@@ -133,6 +134,7 @@ DEPENDENCIES
   rspec
   rubocop
   rufus-scheduler
+  yen
 
 BUNDLED WITH
    1.16.0
