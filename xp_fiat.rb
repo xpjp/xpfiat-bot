@@ -121,12 +121,12 @@ end
 def to_j(int_jpy)
   # insertは破壊的なメソッドなので元の文字列が変化しないようにコピー
   dup_str = int_jpy.to_s
-  # 後ろから6番目("123456789円"の"5"の後ろに"万"を挿入)
-  dup_str.insert(-6, '万') if dup_str.length >= 6
-  # 後ろから11番目("12345万6789円"の"1"の後ろに"億"を挿入)
-  dup_str.insert(-11, '億') if dup_str.length >= 11
-  # 後ろから16番目("6兆7891億2345万6789円"の"6"の後ろに"兆"を挿入)
-  dup_str.insert(-16, '兆') if dup_str.length >= 16
+  # 後ろから5番目("123456789円"の"5"の後ろに"万"を挿入)
+  dup_str.insert(-5, '万') if dup_str.length >= 5
+  # 後ろから10番目("12345万6789円"の"1"の後ろに"億"を挿入)
+  dup_str.insert(-10, '億') if dup_str.length >= 10
+  # 後ろから15番目("6兆7891億2345万6789円"の"6"の後ろに"兆"を挿入)
+  dup_str.insert(-15, '兆') if dup_str.length >= 15
   dup_str
 end
 
