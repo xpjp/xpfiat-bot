@@ -119,15 +119,14 @@ end
 
 # -----------------------------------------------------------------------------
 def to_j(int_jpy)
-  # insertは破壊的なメソッドなので元の文字列が変化しないようにコピー
-  dup_str = int_jpy.to_s
-  # 後ろから5番目("123456789円"の"5"の後ろに"万"を挿入)
-  dup_str.insert(-5, '万') if dup_str.length >= 5
-  # 後ろから10番目("12345万6789円"の"1"の後ろに"億"を挿入)
-  dup_str.insert(-10, '億') if dup_str.length >= 10
-  # 後ろから15番目("6兆7891億2345万6789円"の"6"の後ろに"兆"を挿入)
-  dup_str.insert(-15, '兆') if dup_str.length >= 15
-  dup_str
+  price_int = int_jpy.to_i
+  return 0 unless price_int.positive?
+  price_str = price_int.to_s
+  digits = 1 + Math.log10(price_int) #ケタ数
+  price_str.insert(-5, '万') if digits >= 5
+  price_str.insert(-10, '億') if digits >= 10
+  price_str.insert(-15, '兆') if digits >= 15
+  price_str
 end
 
 # -----------------------------------------------------------------------------
