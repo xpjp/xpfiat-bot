@@ -5,6 +5,7 @@ require "mechanize"
 require "net/http"
 require "active_support"
 require "active_support/core_ext/numeric/conversions"
+require "active_support/core_ext/time/calculations"
 require "active_support/dependencies"
 require "./lib/bot_controller"
 
@@ -140,7 +141,8 @@ bc.include! Actions::Messages::Hayo
 bc.include! Actions::Messages::Wayo
 
 bc.add_schedule "5m" do |bot|
-  bot.update_status(:online, "だいたい#{format('%.3f', xp_jpy.to_s(:delimited))}円だよ〜", nil)
+  _time_now = Time.now.in_time_zone("Asia/Tokyo")
+  bot.update_status(:online, "#{format('%.3f', xp_jpy.to_s(:delimited))}円 (#{_time_now.to_s(:db)})", nil)
 end
 
 bc.run
