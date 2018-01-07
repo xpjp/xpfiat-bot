@@ -27,6 +27,8 @@ def read_url(coin_name)
     "https://poloniex.com/public?command=returnTicker"
   when :btc_jpy
     "https://coincheck.com/api/rate/btc_jpy"
+  when :cmc_xp_jpy
+    "https://api.coinmarketcap.com/v1/ticker/experience-points/?convert=JPY"
   end
 end
 
@@ -38,11 +40,14 @@ def read_price_from_json(coin_name, json)
     json["BTC_DOGE"]["last"]
   when :btc_jpy
     json["rate"]
+  when :cmc_xp_jpy
+    json[0]["price_jpy"]
   end
 end
 
 def xp_jpy
-  read_price(:xp_doge) * read_price(:doge_btc) * read_price(:btc_jpy)
+  # read_price(:xp_doge) * read_price(:doge_btc) * read_price(:btc_jpy)
+  read_price(:cmc_xp_jpy)
 end
 
 # -----------------------------------------------------------------------------
