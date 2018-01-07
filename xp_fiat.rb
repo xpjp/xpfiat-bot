@@ -145,9 +145,9 @@ bc.include! Actions::Messages::Register
 bc.include! Actions::Messages::Hayo
 bc.include! Actions::Messages::Wayo
 
-bc.add_schedule "5m" do |bot|
+bc.add_schedule "1m" do |bot|
   _time_now = Time.now.in_time_zone("Asia/Tokyo")
-  bot.update_status(:online, "#{format('%.3f', xp_jpy.to_s(:delimited))}円 (#{_time_now.to_s(:db)})", nil)
+  bot.update_status(:online, "#{format('%.3f', xp_jpy.to_s(:delimited))}円 [#{_time_now.strftime("%H:%M:%S")}]", nil)
 end
 
 bc.run
