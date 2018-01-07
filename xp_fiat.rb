@@ -5,6 +5,7 @@ require "mechanize"
 require "net/http"
 require "active_support"
 require "active_support/core_ext/numeric/conversions"
+require "active_support/core_ext/time/calculations"
 require "active_support/dependencies"
 require "./lib/bot_controller"
 
@@ -58,37 +59,35 @@ def xp2jpy(event)
     また、XPの日本円換算を知りたい方はクリプトフォリオをおすすめします。
 
     iOS
-    https://itunes.apple.com/jp/app/cryptofolio-%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%83%95%E3%82%A9%E3%83%AA%E3%82%AA/id1272475312?mt=8
+    <https://goo.gl/WgyN6A>
 
     Android
-    https://play.google.com/store/apps/details?id=com.appruns.and.dist.cryptofolio&hl=ja
+    <https://goo.gl/vQBg8R>
   HEREDOC
   # rubocop:enable Style/FormatStringToken
   event.respond message
 end
 
 # -----------------------------------------------------------------------------
-def how_rain(event, max_history)
-  messages = event.channel.history(max_history)
+def how_rain(messages:)
   sum = 0.0
   messages.each do |message|
     # Xp-Bot以外は無視 (一般ユーザーのRainedコピペなどに反応しないように)
-    next if message.author.id != 352815000257167362
+    next if message.author.id != 352_815_000_257_167_362
 
     # 正規表現で、ユーザーあたりのXPとユーザー数を取得し、乗算して合計する
     # 本家Botの出力が変わったら計算できないのでその場合は更新すること
     if message.content =~ /Rained:\s(\d+\.?\d*)\sTo:\s(\d+)\s/
-      amount = $1.to_f * $2.to_i
+      amount = Regexp.last_match(1).to_f * Regexp.last_match(2).to_i
       sum += amount.round(7) # 第七位までで四捨五入、整数のrainであれば整数になるはず
     end
   end
-  if sum.to_i == sum
-    # ぴったり整数になるようであれば、intにしてからstringにする
-    event.send_message("只今の降雨量は #{sum.to_i.to_s(:delimited)} Xpです。")
-  elsif
-    # 整数でないrainがあった場合、加算した際に誤差の問題で桁が大きくなっていることがあるのでここでもround
-    event.send_message("只今の降雨量は #{sum.round(7).to_s(:delimited)} Xpです。")
-  end
+end
+
+def how_rainfall(sum:)
+  # ぴったり整数になるようであれば、intにしてからstringにする
+  # 整数でないrainがあった場合、加算した際に誤差の問題で桁が大きくなっていることがあるのでここでもround
+  sum.to_i == sum ? sum.to_i : sum.round(7)
 end
 
 # -----------------------------------------------------------------------------
@@ -144,7 +143,8 @@ bc.include! Actions::Messages::Hayo
 bc.include! Actions::Messages::Wayo
 
 bc.add_schedule "5m" do |bot|
-  bot.update_status(:online, "だいたい#{format('%.3f', xp_jpy.to_s(:delimited))}円だよ〜", nil)
+  _time_now = Time.now.in_time_zone("Asia/Tokyo")
+  bot.update_status(:online, "#{format('%.3f', xp_jpy.to_s(:delimited))}円 (#{_time_now.to_s(:db)})", nil)
 end
 
 bc.run
