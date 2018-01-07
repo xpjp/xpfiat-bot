@@ -7,7 +7,8 @@ require "active_support"
 require "active_support/core_ext/numeric/conversions"
 require "active_support/dependencies"
 require "./lib/bot_controller"
-
+require "number_to_yen"
+include NumberToYen
 ActiveSupport::Dependencies.autoload_paths << "./lib"
 
 # -----------------------------------------------------------------------------
@@ -121,11 +122,7 @@ end
 def to_j(int_jpy)
   price_int = int_jpy.to_i
   return 0 unless price_int.positive?
-  price_str = price_int.to_s
-  digits = 1 + Math.log10(price_int) #ケタ数
-  price_str.insert(-5, '万') if digits >= 5
-  price_str.insert(-10, '億') if digits >= 10
-  price_str.insert(-15, '兆') if digits >= 15
+  price_str = number_to_yen(price_int)
   price_str
 end
 
@@ -133,7 +130,7 @@ end
 def market_cap(event)
   mcap_value = read_price(:xp_mcap_jpy)
   str_mcap_jpy = to_j(mcap_value.to_i)
-  event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ 私の戦闘力は#{str_mcap_jpy}円 です"
+  event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ 私の戦闘力は#{str_mcap_jpy} です"
 end
 
 bc = BotController.new

@@ -61,6 +61,7 @@ GEM
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     ntlm-http (0.1.1)
+    number_to_yen (0.1.1)
     opus-ruby (1.0.1)
       ffi
     parallel (1.12.1)
@@ -128,6 +129,7 @@ DEPENDENCIES
   mechanize
   natto
   negapoji!
+  number_to_yen
   pry-byebug
   rmagick
   rspec
