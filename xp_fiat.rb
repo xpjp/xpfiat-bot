@@ -5,6 +5,7 @@ require "mechanize"
 require "net/http"
 require "active_support"
 require "active_support/core_ext/numeric/conversions"
+require "active_support/core_ext/time/calculations"
 require "active_support/dependencies"
 require "./lib/bot_controller"
 require "number_to_yen"
@@ -63,10 +64,10 @@ def xp2jpy(event)
     また、XPの日本円換算を知りたい方はクリプトフォリオをおすすめします。
 
     iOS
-    https://itunes.apple.com/jp/app/cryptofolio-%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88%E3%83%95%E3%82%A9%E3%83%AA%E3%82%AA/id1272475312?mt=8
+    <https://goo.gl/WgyN6A>
 
     Android
-    https://play.google.com/store/apps/details?id=com.appruns.and.dist.cryptofolio&hl=ja
+    <https://goo.gl/vQBg8R>
   HEREDOC
   # rubocop:enable Style/FormatStringToken
   event.respond message
@@ -161,7 +162,8 @@ bc.include! Actions::Messages::Hayo
 bc.include! Actions::Messages::Wayo
 
 bc.add_schedule "5m" do |bot|
-  bot.update_status(:online, "だいたい#{format('%.3f', xp_jpy.to_s(:delimited))}円だよ〜", nil)
+  _time_now = Time.now.in_time_zone("Asia/Tokyo")
+  bot.update_status(:online, "#{format('%.3f', xp_jpy.to_s(:delimited))}円 (#{_time_now.to_s(:db)})", nil)
 end
 
 bc.run
