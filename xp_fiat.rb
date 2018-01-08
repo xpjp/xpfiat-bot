@@ -9,7 +9,6 @@ require "active_support/core_ext/time/calculations"
 require "active_support/dependencies"
 require "./lib/bot_controller"
 require "number_to_yen"
-include NumberToYen
 ActiveSupport::Dependencies.autoload_paths << "./lib"
 
 # -----------------------------------------------------------------------------
