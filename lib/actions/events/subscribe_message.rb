@@ -23,6 +23,7 @@ module Actions
           channel_id: event.channel.id,
           channel: event.channel.name
         }.to_json
+        # TODO: タイムアウト等の例外対応
         response = Mechanize.new.post("http://198.13.43.77:8080/insert", body )
         json = JSON.parse(response.body)
 
