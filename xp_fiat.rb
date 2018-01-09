@@ -8,7 +8,7 @@ require "active_support/core_ext/numeric/conversions"
 require "active_support/core_ext/time/calculations"
 require "active_support/dependencies"
 require "./lib/bot_controller"
-
+require "number_to_yen"
 ActiveSupport::Dependencies.autoload_paths << "./lib"
 
 # -----------------------------------------------------------------------------
@@ -27,6 +27,8 @@ def read_url(coin_name)
     "https://poloniex.com/public?command=returnTicker"
   when :btc_jpy
     "https://coincheck.com/api/rate/btc_jpy"
+  when :xp_mcap_jpy
+    "https://api.coinmarketcap.com/v1/ticker/xp/?convert=JPY"
   end
 end
 
@@ -38,6 +40,8 @@ def read_price_from_json(coin_name, json)
     json["BTC_DOGE"]["last"]
   when :btc_jpy
     json["rate"]
+  when :xp_mcap_jpy
+    json[0]["market_cap_jpy"]
   end
 end
 
@@ -114,6 +118,21 @@ def doge(event)
   event.respond "#{event.user.mention} <:doge:391497526278225920>＜ わい一匹で、#{amount.to_i.to_s(:delimited)} くらいXPが買えるワン"
 end
 
+# -----------------------------------------------------------------------------
+def to_j(int_jpy)
+  price_int = int_jpy.to_i
+  return 0 unless price_int.positive?
+  price_str = number_to_yen(price_int)
+  price_str
+end
+
+# -----------------------------------------------------------------------------
+def market_cap(event)
+  mcap_value = read_price(:xp_mcap_jpy)
+  str_mcap_jpy = to_j(mcap_value.to_i)
+  event.respond "#{event.user.mention} <:xpchan01:391497596461645824>＜ 私の戦闘力は#{str_mcap_jpy} です"
+end
+
 bc = BotController.new
 
 bc.include_commands Actions::Commands::Ping, false
@@ -122,6 +141,7 @@ bc.include_commands Actions::Commands::Noguchi, "千円で買えるXPの量"
 bc.include_commands Actions::Commands::Higuchi, "五千円で買えるXPの量"
 bc.include_commands Actions::Commands::Yukichi, "一万円で買えるXPの量"
 bc.include_commands Actions::Commands::Doge, "1DOGEで買えるXPの量"
+bc.include_commands Actions::Commands::MarketCap, "XPの時価総額日本円換算"
 bc.include_commands Actions::Commands::XpJpy, ["1XPの日本円換算", "[amount] amount分のXPの日本円換算"]
 bc.include_commands Actions::Commands::JpyXp, "[amount] 日本円でどれだけ買えるか"
 bc.include_commands Actions::Commands::MakeImg, "[sentence] 半角スペースで改行 ノベルゲーム風の画像を生成"
