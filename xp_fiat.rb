@@ -47,7 +47,6 @@ end
 
 # -----------------------------------------------------------------------------
 def xp2jpy(event)
-  # rubocop:disable Style/FormatStringToken
   message = <<~HEREDOC
     #{event.user.mention}
     ただいま `?いくら` コマンドはサーバーへの過負荷により動作を停止しています。
@@ -136,13 +135,12 @@ bc.include! Actions::Events::JoinAnnouncer
 bc.include! Actions::Events::CommandPatroller
 
 bc.include! Actions::Messages::Balance
-#bc.include! Actions::Messages::Register
 bc.include! Actions::Messages::Hayo
 bc.include! Actions::Messages::Wayo
 
 bc.add_schedule "1m" do |bot|
   _time_now = Time.now.in_time_zone("Asia/Tokyo")
-  bot.update_status(:online, "#{format('%.3f', xp_jpy.to_s(:delimited))}円 [#{_time_now.strftime("%H:%M:%S")}]", nil)
+  bot.update_status(:online, "#{format('%.3f', xp_jpy.to_s(:delimited))}円 [#{_time_now.strftime('%H:%M:%S')}]", nil)
 end
 
 bc.run
