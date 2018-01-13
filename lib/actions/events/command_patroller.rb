@@ -28,8 +28,7 @@ module Actions
         is_permitted = permitted_commands&.include?(command)
 
         warning_text = <<~HEREDOC
-          #{no_prefix_command} はここではなく <##{@patroll_config['reccomended_channels'][no_prefix_command]}> でしてください。
-          ご協力ありがとうございます。"
+          #{no_prefix_command} は <##{@patroll_config['reccomended_channels'][no_prefix_command]}> で実行をお願いします。
         HEREDOC
         event.respond "#{event.user.mention} #{warning_text}" unless is_permitted
       end
