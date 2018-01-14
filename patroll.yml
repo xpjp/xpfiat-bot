@@ -8,8 +8,8 @@ target_commands:
   - ",balance"
   - ",deposit"
   - ",withdraw"
-  - ",rain"
-  - ",tip"
+  # - ",rain"
+  # - ",tip"
 
 # 各コマンドの推奨チャンネル
 reccomended_channels:
