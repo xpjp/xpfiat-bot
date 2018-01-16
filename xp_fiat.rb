@@ -32,10 +32,6 @@ def read_price_from_json(coin_name, json)
   case coin_name
   when :xp_doge
     json["result"]["LastPrice"]
-  when :doge_btc
-    json["BTC_DOGE"]["last"]
-  when :btc_jpy
-    json["rate"]
   when :cmc_xp_jpy
     json[0]["price_jpy"]
   end
