@@ -23,12 +23,8 @@ def read_url(coin_name)
   case coin_name
   when :xp_doge
     "https://www.coinexchange.io/api/v1/getmarketsummary?market_id=137"
-  when :doge_btc
-    "https://poloniex.com/public?command=returnTicker"
-  when :btc_jpy
-    "https://coincheck.com/api/rate/btc_jpy"
-  when :xp_mcap_jpy
-    "https://api.coinmarketcap.com/v1/ticker/xp/?convert=JPY"
+  when :cmc_xp_jpy
+    "https://api.coinmarketcap.com/v1/ticker/experience-points/?convert=JPY"
   end
 end
 
@@ -36,17 +32,13 @@ def read_price_from_json(coin_name, json)
   case coin_name
   when :xp_doge
     json["result"]["LastPrice"]
-  when :doge_btc
-    json["BTC_DOGE"]["last"]
-  when :btc_jpy
-    json["rate"]
-  when :xp_mcap_jpy
-    json[0]["market_cap_jpy"]
+  when :cmc_xp_jpy
+    json[0]["price_jpy"]
   end
 end
 
 def xp_jpy
-  read_price(:xp_doge) * read_price(:doge_btc) * read_price(:btc_jpy)
+  read_price(:cmc_xp_jpy)
 end
 
 # -----------------------------------------------------------------------------
@@ -155,13 +147,12 @@ bc.include! Actions::Events::JoinAnnouncer
 bc.include! Actions::Events::CommandPatroller
 
 bc.include! Actions::Messages::Balance
-bc.include! Actions::Messages::Register
 bc.include! Actions::Messages::Hayo
 bc.include! Actions::Messages::Wayo
 
-bc.add_schedule "5m" do |bot|
+bc.add_schedule "1m" do |bot|
   _time_now = Time.now.in_time_zone("Asia/Tokyo")
-  bot.update_status(:online, "#{format('%.3f', xp_jpy.to_s(:delimited))}円 (#{_time_now.to_s(:db)})", nil)
+  bot.update_status(:online, "#{format('%.3f', xp_jpy.to_s(:delimited))}円 [#{_time_now.strftime('%H:%M:%S')}]", nil)
 end
 
 bc.run
