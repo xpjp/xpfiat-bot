@@ -51,7 +51,6 @@ end
 
 # -----------------------------------------------------------------------------
 def xp2jpy(event)
-  # rubocop:disable Style/FormatStringToken
   message = <<~HEREDOC
     #{event.user.mention}
     ただいま `?いくら` コマンドはサーバーへの過負荷により動作を停止しています。

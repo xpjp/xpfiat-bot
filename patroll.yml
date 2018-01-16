@@ -2,19 +2,41 @@
 # 本来のチャネル以外でコマンドを実行すると警告を発する機能の設定ファイル
 ########################################################################
 
-# 注意文言
-warning_text: "balanceはここではなく <#390058691845554177> でしてください。\nご協力ありがとうございます。"
 # 監視対象のコマンド一覧
-# Prefixが変更になったときに変更の必要があるのでそのとき考える
 target_commands:
-#  - ",register"
+  - ",register"
   - ",balance"
-# コマンドを実行しても良いチャネルを登録
-# 厳しすぎる場合は禁止チャネルを指定する方向にシフト
-# (とはいえ、warningが飛ぶだけで実行できないわけではないのでこれでも良いかもしれない）
+  - ",deposit"
+  - ",withdraw"
+  # - ",rain"
+  # - ",tip"
+
+# 各コマンドの推奨チャンネル
+reccomended_channels:
+  register: 390074030834712576
+  balance: 375532870376357889
+  deposit: 390058691845554177
+  withdraw: 390058691845554177
+  rain: 379064989270540300
+  tip: 379064989270540300
+
+# 監視対象のコマンドを実行できるチャンネル
 allowed_channels:
-#  - "experiment" # 開発用
-#  - "register-room"
-  - "bot-spam"
-  - "bot-spam2"
-  - "bot_control"
+  390074030834712576:
+    name: "xpbot_register"
+    permitted_commands:
+      - ",register"
+  375532870376357889:
+    name: "xpbot_balance"
+    permitted_commands:
+      - ",balance"
+  390058691845554177:
+    name: "xpbot_deposit_withdraw"
+    permitted_commands:
+      - ",deposit"
+      - ",withdraw"
+  379064989270540300:
+    name: "xpbot_rain_tip"
+    permitted_commands:
+      - ",rain"
+      - ",tip"

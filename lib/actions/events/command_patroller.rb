@@ -13,13 +13,24 @@ module Actions
     module CommandPatroller
       extend Discordrb::EventContainer
       @patroll_config = YAML.load_file("./patroll.yml")
-      message do |event|
+      message(start_with: ",") do |event|
         # apiの仕様的に存在しないことが保証されているかわからなかったので、落ちないように一応ガード節
-        break if !event.message || !event.channel || !event.user
+        next if !event.message || !event.channel || !event.user
 
-        needs_to_warn = @patroll_config["target_commands"].include?(event.message.content) &&
-                        !@patroll_config["allowed_channels"].include?(event.channel.name) # railsのexclude?使いたい
-        event.respond "#{event.user.mention} #{@patroll_config['warning_text']}" if needs_to_warn
+        command = event.message.content.strip.split(" ")[0]
+        no_prefix_command = command.split(",")[1]
+        next unless no_prefix_command
+
+        # 監視対象のコマンドが許可されているかを確認
+        is_restricted_command = @patroll_config["target_commands"].include?(command)
+        next unless is_restricted_command
+        permitted_commands = @patroll_config["allowed_channels"][event.channel.id].try(:[], "permitted_commands")
+        is_permitted = permitted_commands&.include?(command)
+
+        warning_text = <<~HEREDOC
+          #{no_prefix_command} は <##{@patroll_config['reccomended_channels'][no_prefix_command]}> で実行をお願いします。
+        HEREDOC
+        event.respond "#{event.user.mention} #{warning_text}" unless is_permitted
       end
     end
   end

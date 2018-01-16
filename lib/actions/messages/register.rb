@@ -6,10 +6,17 @@ module Actions
   module Messages
     module Register
       extend Discordrb::EventContainer
-
+      @patroll_config = YAML.load_file("./patroll.yml")
       message(start_with: ",register") do |event|
-        event.respond "#{event.user.mention} ウォレットは登録されました。利用できるよう準備を行っております。"
-        + "しばらく時間を置いてから <#390058691845554177> で`,balanceを`して確認してください。"
+        next unless @patroll_config["reccomended_channels"]["register"] == event.channel.id
+
+        balance_channel_id = @patroll_config["reccomended_channels"]["balance"]
+        message = <<~HEREDOC
+          #{event.user.mention} ウォレットは登録されました。
+          利用できるよう準備を行っております。しばらく時間を置いてから <##{balance_channel_id}> で`,balance`を実行して確認してください。
+        HEREDOC
+
+        event.respond message
       end
     end
   end
