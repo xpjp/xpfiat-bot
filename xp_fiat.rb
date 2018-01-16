@@ -25,6 +25,8 @@ def read_url(coin_name)
     "https://www.coinexchange.io/api/v1/getmarketsummary?market_id=137"
   when :cmc_xp_jpy
     "https://api.coinmarketcap.com/v1/ticker/experience-points/?convert=JPY"
+  when :xp_mcap_jpy
+    "https://api.coinmarketcap.com/v1/ticker/xp/?convert=JPY"
   end
 end
 
@@ -34,6 +36,8 @@ def read_price_from_json(coin_name, json)
     json["result"]["LastPrice"]
   when :cmc_xp_jpy
     json[0]["price_jpy"]
+  when :xp_mcap_jpy
+    json[0]["market_cap_jpy"]
   end
 end
 
