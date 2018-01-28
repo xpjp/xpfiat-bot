@@ -8,7 +8,9 @@ module Actions
     module XpJpy
       extend Discordrb::Commands::CommandContainer
 
-      command [:xp_jpy, :いくら] { |event, _param| xp2jpy(event) }
+      command [:xp_jpy, :いくら] do |event, _param|
+        xp2jpy(event)
+       end
     end
   end
 end
