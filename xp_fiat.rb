@@ -65,8 +65,7 @@ def xp2jpy(event, param = 0)
   HEREDOC
 
   # XPPayサーバーとchipstarのテストサーバーでいくらコマンドを許可
-  allow_servers = [388_106_353_882_693_633, 404_118_276_264_951_808]
-  if allow_servers.include?(event.server.id)
+  if [388_106_353_882_693_633, 404_118_276_264_951_808].include?(event.server.id)
     _time_now = Time.now.in_time_zone("Asia/Tokyo")
     price = "#{param}円はおおよそ `#{format('%.3f', (param.to_f / xp_jpy)).to_f.to_s(:delimited)}XP` " unless param.nil?
     message = <<~HEREDOC
