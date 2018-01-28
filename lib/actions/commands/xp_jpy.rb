@@ -10,7 +10,7 @@ module Actions
 
       command [:xp_jpy, :いくら] do |event, _param|
         xp2jpy(event, _param)
-       end
+      end
     end
   end
 end
