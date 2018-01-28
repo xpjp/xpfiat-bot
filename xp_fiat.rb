@@ -46,7 +46,8 @@ def xp_jpy
 end
 
 # -----------------------------------------------------------------------------
-def xp2jpy(event)
+def xp2jpy(event,_param)
+
   message = <<~HEREDOC
     #{event.user.mention}
     ただいま `?いくら` コマンドはサーバーへの過負荷により動作を停止しています。
@@ -63,6 +64,19 @@ def xp2jpy(event)
     Android
     <https://goo.gl/vQBg8R>
   HEREDOC
+
+  # XPPayサーバーとchipstarのテストサーバーでいくらコマンドを許可
+  sever_id = event.server.id
+  if sever_id == 388106353882693633 || sever_id == 404118276264951808
+    _time_now = Time.now.in_time_zone("Asia/Tokyo")
+    unit_price = xp_jpy()
+    price = ""
+    if _param
+      price = _param.to_f / unit_price
+      price = "#{_param}円はおおよそ `#{format('%.3f', price).to_f.to_s(:delimited)}XP` "
+    end
+    message = "#{price}(CMCの参考価格1XP = #{format('%.3f', unit_price.to_s(:delimited))}円[#{_time_now.strftime('%H:%M:%S')}])\n※この価格はCoinMarketCap(<https://coinmarketcap.com>)のAPIから取得した参考価格です。取引所の価格と異なる場合があります。"
+  end
   # rubocop:enable Style/FormatStringToken
   event.respond message
 end
