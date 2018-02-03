@@ -5,7 +5,7 @@
 # メッセージを取得するチャネルを登録
 target_channels:
   # - "register-room"
-  # - "general"
+  - "general"
   - "chat_1_xp"
   - "chat_2_jk"
   - "chat_3_honobono"
